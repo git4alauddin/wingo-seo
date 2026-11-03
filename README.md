@@ -4,9 +4,11 @@ An educational website project for learning probability, randomness, technical S
 
 ## Current status
 
-Repository baseline only. Website implementation has not started.
+Phase 1 research and architecture are documented. Website implementation starts in Phase 2; no runnable application or deployment exists yet.
 
 The authoritative project specification is [handoff.txt](handoff.txt).
+
+Read the [Phase 1 report](docs/phase-1-report.md) for decisions, evidence, limitations, and the next build steps. The [documentation index](docs/README.md) links the keyword research, content plan, architecture, simulation model, and validation plan.
 
 ## Planned stack
 
@@ -33,4 +35,4 @@ This project will use local simulations and explicitly stated mathematical assum
 
 ## Development
 
-Install, build, and test commands will be documented when the application is scaffolded. No runnable application or deployment is included in this initial baseline.
+Install, build, and test commands will be documented when the application is scaffolded in Phase 2. No runnable application or deployment is included in the research phase.
