@@ -187,6 +187,7 @@
   .footer-top nav a:hover { text-decoration: underline; }
   .footer-note p { font-size: .75rem; color: var(--muted); }
   .footer-bottom { padding-block: 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 20px; font-size: .64rem; color: var(--muted); }
+  .analytics-links { display: flex; flex-wrap: wrap; gap: 12px 24px; padding-bottom: 20px; font-size: .75rem; color: var(--muted); }
   .breadcrumbs { padding-block: 25px; font-size: .68rem; color: var(--muted); }
   .breadcrumbs ol { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .breadcrumbs li + li::before { content: '/'; color: #9895a2; margin-right: 8px; }

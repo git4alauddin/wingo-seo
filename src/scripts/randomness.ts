@@ -2,6 +2,7 @@ import { createSampler, runBatch, type Sampler } from '../lib/simulation';
 import { statistics } from '../lib/statistics';
 import { formatProbability } from '../lib/probability';
 import { integer, message, required, text } from './tool-ui';
+import { track } from '../lib/analytics';
 
 const root = document.querySelector<HTMLElement>('[data-randomness]');
 if (root) initialize(root);
@@ -15,6 +16,8 @@ function initialize(root: HTMLElement) {
   generate.addEventListener('click', async () => {
     if (operation || !sample) return;
     const controller = new AbortController(); operation = controller; const token = ++generation;
+    const metricRun = {}, parameters = { tool: 'randomness' as const, run_mode: 'comparison' as const, sample_size_bucket: '2001-10000' as const };
+    track('simulator_start', parameters, metricRun);
     generate.disabled = true; cancel.disabled = false; text(root, '[data-error]', '');
     results.hidden = true; results.replaceChildren();
     required<HTMLElement>(root, '[data-illustration]').hidden = true;
@@ -34,6 +37,7 @@ function initialize(root: HTMLElement) {
         card.append(heading, bar, counts, longest, gap); results.append(card);
       }
       results.hidden = false;
+      track('simulator_complete', parameters, metricRun);
       text(root, '[data-status]', 'Two generated samples complete. Neither history changes the next draw’s theoretical 50/50 size probability. A larger sample is not guaranteed to be closer.');
     } catch (error) { if (token === generation) { text(root, '[data-error]', message(error)); text(root, '[data-status]', 'Sampling did not complete. No generated comparison is shown.'); } }
     finally { if (token === generation) { operation = undefined; generate.disabled = !sample; cancel.disabled = true; } }

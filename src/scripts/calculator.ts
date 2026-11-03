@@ -3,6 +3,7 @@ import { eventDigits, formatProbability, parseSequence, sequenceProbability } fr
 import { createSampler, runBatch, type Sampler } from '../lib/simulation';
 import { compareEvent } from '../lib/statistics';
 import { integer, message, required, text } from './tool-ui';
+import { track } from '../lib/analytics';
 
 const root = document.querySelector<HTMLElement>('[data-calculator]');
 if (root) initialize(root);
@@ -23,6 +24,7 @@ function initialize(root: HTMLElement) {
       const digits = eventDigits(event.value);
       text(root, '[data-event-result]', `${event.value}: ${digits.length}/10 = ${formatProbability(digits.length / 10)}. Favorable digits: ${digits.join(', ')}.`);
       text(root, '[data-event-error]', ''); event.removeAttribute('aria-invalid');
+      track('calculator_use', { calculator_action: 'event' });
     } catch (error) { text(root, '[data-event-error]', message(error)); event.setAttribute('aria-invalid', 'true'); }
   });
   sequenceForm.addEventListener('submit', e => {
@@ -32,6 +34,7 @@ function initialize(root: HTMLElement) {
       const factors = events.map(item => `${eventDigits(item).length}/10`).join(' × ');
       text(root, '[data-sequence-result]', `${events.join(' → ')}: ${factors} = ${formatProbability(p)} (decimal probability ${p < 0.000001 ? p.toExponential(4) : Number(p.toPrecision(8))}). Applies to the next specified ${events.length} draws in this order, assuming independence.`);
       text(root, '[data-sequence-error]', ''); sequence.removeAttribute('aria-invalid');
+      track('calculator_use', { calculator_action: 'sequence' });
     } catch (error) { text(root, '[data-sequence-error]', message(error)); sequence.setAttribute('aria-invalid', 'true'); sequence.focus(); }
   });
   root.querySelectorAll<HTMLButtonElement>('[data-sequence-example]').forEach(button => button.addEventListener('click', () => { sequence.value = button.dataset.sequenceExample!; sequenceForm.requestSubmit(); }));
@@ -50,6 +53,7 @@ function initialize(root: HTMLElement) {
       const digits = await runBatch(n, sample, { signal: operation.signal, onProgress: digits => { if (token === generation) text(root, '[data-trials-progress]', `${integer(digits.length)} of ${integer(n)} draws.`); } });
       if (token !== generation) return;
       const comparison = compareEvent(digits, selected);
+      track('calculator_use', { calculator_action: 'trials' });
       text(root, '[data-trials-result]', `${selected} · ${integer(n)} local trials: theoretical ${formatProbability(comparison.theoretical)}; observed ${integer(comparison.count)}/${integer(n)} = ${formatProbability(comparison.observed!)}; expected count ${Number(comparison.expected.toPrecision(8))}; gap ${comparison.gap! >= 0 ? '+' : ''}${comparison.gap!.toFixed(2)} percentage points.`);
     } catch (error) { if (token === generation) { text(root, '[data-trials-error]', message(error)); text(root, '[data-trials-result]', 'Comparison did not complete.'); } }
     finally { if (token === generation) { active = undefined; ready(); } }

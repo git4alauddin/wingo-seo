@@ -6,6 +6,7 @@ import { gzipSync } from 'node:zlib';
 import { routes } from './routes.mjs';
 import { siteConfig } from '../config/site.mjs';
 import { checkSEO } from './check-seo.mjs';
+import { measurementConfig } from '../config/measurement.mjs';
 
 const root = resolve(process.env.SITE_CHECK_DIR ?? 'dist');
 const htmlPath = route => route === '/404.html' ? join(root, '404.html') : join(root, route, 'index.html');
@@ -48,12 +49,16 @@ for (const [route, $] of pages) {
     assert(existsSync(resolve(root, `.${url.pathname}`)), `${route}: missing asset ${href}`);
   });
   assert.equal($('script[src^="http"], iframe').length, 0, `${route}: unexpected external service`);
+  const analyticsOn = measurementConfig.enabled && route !== '/404.html';
+  assert.equal($('[data-consent]').length, analyticsOn ? 1 : 0, `${route}: analytics build gate`);
+  assert.equal($('meta[name="google-site-verification"]').attr('content'), measurementConfig.verificationToken || undefined);
   if (toolRoutes.includes(route)) {
     assert($('[data-enhanced][hidden]').length, `${route}: JavaScript-only controls must start hidden`);
     assert($('[data-fallback]').text().includes('JavaScript'), `${route}: missing no-JavaScript explanation`);
     assert($('script[src]').length, `${route}: missing tool bundle`);
   } else {
-    assert.equal($('script[src], form').length, 0, `${route}: non-tool route should not ship interactive JavaScript`);
+    assert.equal($('form').length, 0, `${route}: no unexpected non-tool form`);
+    if (!analyticsOn) assert.equal($('script[src]').length, 0, `${route}: disabled analytics must not add page scripts`);
   }
   // Count the route's entry modules, their shared chunks, and its styles.
   const visited = new Set();

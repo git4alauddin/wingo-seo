@@ -4,11 +4,11 @@ An original educational website for learning number classifications, probability
 
 ## Current status
 
-**Phase 4: technical SEO implemented.** The Astro site includes 14 public pages, six guides, working educational tools, a custom 404, canonical/share metadata, structured data, sitemap/robots generation, and environment-specific indexing controls.
+**Phase 5: configurable analytics implemented.** The Astro site includes 14 public pages, six guides, working educational tools, technical SEO, and consent-based GA4 instrumentation with Search Console verification support and setup instructions.
 
 The tools run locally in the browser. No live deployment or analytics is enabled. Default local/preview builds remain `noindex`; production indexing requires an explicit opt-in. Cloudflare preview/alias protection is generated but still needs live host verification after authorized deployment.
 
-The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 4 report](docs/phase-4-report.md), and [technical SEO guide](docs/technical-seo.md) for decisions, evidence, and phase boundaries. Earlier reports remain historical records.
+The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 5 report](docs/phase-5-report.md), [analytics guide](docs/analytics-events.md), and [Search Console setup](docs/search-console-setup.md) for decisions, evidence, and pending account steps. Earlier reports remain historical records.
 
 ## Run locally
 
@@ -59,7 +59,9 @@ The suite starts its own temporary server on port **4322**, without reusing an e
 
 Review screenshots, including populated tool states, are saved under `artifacts/screenshots/phase-3/`; failure traces/screenshots go under `test-results/`. Generated artifacts are ignored by Git. Automated accessibility checks supplement visual/keyboard review; they do not establish certification.
 
-`npm test` runs deterministic Vitest checks for the tools, indexing configuration, canonical paths, sitemap XML, host rules, and safe structured-data serialization. `npm run test:seo` builds preview, indexable production, and inherited-production Cloudflare branch-preview profiles into ignored `artifacts/seo/` folders, then validates their actual output. It leaves default `dist/` untouched. Logs are saved alongside those folders.
+`npm test` runs deterministic Vitest checks for the tools, indexing, structured data, measurement gates, event allowlists, consent records, and referrer filtering. `npm run test:seo` builds preview, indexable production, inherited-production Cloudflare branch-preview, and a synthetic analytics-enabled production profile into ignored `artifacts/seo/` folders, then validates their actual output. It leaves default `dist/` untouched. Logs are saved alongside those folders. Run this matrix before running the analytics browser tests directly: they use its synthetic fixture.
+
+Analytics browser checks intercept every request and substitute a local tag stub. They cover consent, refusal, withdrawal, cross-tab changes, privacy signals, event categories, deduplication, and failure modes without contacting Google. Consent screenshots are saved under `artifacts/screenshots/phase-5/`. Real Google SDK behavior and property delivery still require authorized live verification.
 
 The full browser suite also verifies robots/sitemap HTTP responses, query-independent canonicals, share-image delivery, and 404 indexing behavior. GitHub Actions runs the full validation on pushes to `main` and pull requests, without deploying.
 
@@ -70,13 +72,14 @@ The full browser suite also verifies robots/sitemap HTTP responses, query-indepe
 - **Calculator:** calculate an exact digit, size/color event, or supported compound event. Enter 1–20 comma-separated ordered events for a specified block; this is not an anywhere-in-history streak calculation. Compare an event with a locally generated sample.
 - **Randomness:** generate separate samples of 20 and 2,000 digits to compare counts, relative gaps, and longest observed size runs. The next draw's theoretical size probability stays 50/50 under the model.
 
-Sampling uses browser `crypto.getRandomValues` with rejection mapping. If that API is unavailable, sampling is disabled with an explanation; mathematical calculations and static explanations remain available. Outcomes are not live external results or predictions. No outcomes are automatically persisted, and no tool data is sent to an external service. See the [model specification](docs/simulation-model.md).
+Sampling uses browser `crypto.getRandomValues` with rejection mapping. If that API is unavailable, sampling is disabled with an explanation; mathematical calculations and static explanations remain available. Outcomes are not live external results or predictions. Outcomes and raw tool inputs are not automatically persisted or sent to an external service. Optional analytics records coarse interaction categories only after consent. See the [model specification](docs/simulation-model.md).
 
 ## Project structure
 
 ```text
 config/site.mjs             validated build environment and proposed origin
 config/seo.mjs              canonical, sitemap, robots, and host-rule helpers
+config/measurement.mjs      analytics gates and optional public destinations
 src/components/             navigation, metadata, cards, diagrams, tables
 src/content/guides/         six original Markdown articles
 src/content.config.ts       schema-validated content collection
@@ -110,6 +113,12 @@ Use genuine publication/revision dates and original examples. A supplied revisio
 | `SITE_ENV` | `preview`; accepts `development`, `preview`, `production` |
 | `SITE_ORIGIN` | Proposed `https://learn.kalam.trade` for preview; explicitly required for a production-labeled build |
 | `SITE_INDEXABLE` | `false`; only literal `true` plus production environment can enable indexing |
+| `ANALYTICS_ENABLED` | `false`; requires a valid ID, required consent mode, and production environment |
+| `GA4_MEASUREMENT_ID` | Empty; public GA4 web stream identifier |
+| `ANALYTICS_CONSENT_MODE` | `unconfigured`; set `required` only for an approved activation |
+| `SEARCH_CONSOLE_VERIFICATION_TOKEN` | Empty; optional public production HTML-tag token |
+| `CONTACT_EMAIL` | Empty; optional owner-approved public email destination |
+| `COURSE_INFO_URL` | Empty; optionally `https://course.kalam.trade/` after owner review |
 | `PLAYWRIGHT_CHANNEL` | Unset uses installed Playwright Chromium; `chrome` selects installed Google Chrome |
 
 Unknown environments, invalid indexing flags, and unintended origins fail configuration validation. A production-labeled build without `SITE_INDEXABLE=true` stays excluded. Development/preview environments ignore an inherited true opt-in. Detected Cloudflare branches other than `main` stay excluded even if production settings were inherited; keep the branch guard consistent if the production branch changes.
@@ -118,7 +127,7 @@ Indexable production builds emit fourteen canonical URLs in `/sitemap.xml`, adve
 
 The original 1200×630 share image is committed as PNG, with its editable SVG source. Regenerate it after changing the SVG using `npm run assets:social`; normal builds use the committed image.
 
-Contact details are pending owner input and disclosed honestly. There is no active contact form, invented email, GA4 script, course conversion link, external outcome feed, database, authentication, or payment integration. Privacy/terms describe the current implementation and will change when behavior changes.
+Contact details and course links remain absent by default. Live GA4 remains disabled, and Search Console has not been verified. When deliberately activated, the consent panel allows rejection and later withdrawal; tool usage works with analytics off. See the [event contract and owner activation checklist](docs/analytics-events.md). There is no contact form, invented email, external outcome feed, database, authentication, or payment integration.
 
 Cloudflare project connection, live host verification, and deployment documentation follow in Phase 6; generated static host rules are already prepared. The proposed subdomain has not been confirmed or changed. Privileged service connections, DNS changes, and production actions require the handoff's authorization. Never commit credentials or put secrets in public configuration.
 
@@ -128,7 +137,7 @@ Cloudflare project connection, live host verification, and deployment documentat
 2. Core website and educational content — implemented; validation recorded in the phase report.
 3. Interactive educational tools — implemented; validation recorded in the phase report.
 4. Technical SEO — implemented; validation recorded in the phase report.
-5. Analytics and measurement setup — next.
+5. Analytics instrumentation and Search Console preparation — implemented; live activation pending owner configuration.
 6. QA and authorized production deployment.
 7. Post-deployment baseline and monitoring over the first 30 days.
 

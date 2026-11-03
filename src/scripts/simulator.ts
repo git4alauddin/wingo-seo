@@ -1,6 +1,7 @@
 import { parseCount } from '../lib/model';
 import { createSampler, exportRun, replay, runBatch, TimedRun, type RecordedRun, type Sampler } from '../lib/simulation';
 import { integer, message, renderStatistics, required, text } from './tool-ui';
+import { sizeBucket, track, type EventParameters } from '../lib/analytics';
 
 const root = document.querySelector<HTMLElement>('[data-simulator]');
 if (root) initialize(root);
@@ -20,6 +21,7 @@ function initialize(root: HTMLElement) {
   let batch: AbortController | undefined, timed: TimedRun | undefined, recorded: RecordedRun | undefined;
   let active = false, autoPaused = false, previousTime = 0;
   let sample: Sampler | undefined;
+  let metricRun: object | undefined, metricParameters: EventParameters['simulator_start'] | undefined;
   let capabilityError = '';
 
   required<HTMLElement>(root, '[data-enhanced]').hidden = false;
@@ -35,11 +37,14 @@ function initialize(root: HTMLElement) {
     root.dataset.state = active ? timed?.state ?? 'running' : root.dataset.state ?? 'idle';
   }
   function stopPending() {
+    metricRun = undefined; metricParameters = undefined;
     generation++; batch?.abort(); batch = undefined;
     if (timer !== undefined) clearInterval(timer); timer = undefined;
     timed?.cancel(); active = false; autoPaused = false;
   }
   function completed(modeValue: 'batch' | 'timed', digits: readonly number[]) {
+    if (metricRun && metricParameters) track('simulator_complete', metricParameters, metricRun);
+    metricRun = undefined; metricParameters = undefined;
     recorded = { mode: modeValue, digits: Object.freeze([...digits]) };
     active = false; root.dataset.state = 'complete';
     if (timer !== undefined) clearInterval(timer); timer = undefined;
@@ -76,6 +81,8 @@ function initialize(root: HTMLElement) {
     catch (error) { count.setAttribute('aria-invalid', 'true'); text(root, '[data-error]', message(error)); count.focus(); return; }
     if (!['batch', 'timed'].includes(mode.value)) { text(root, '[data-error]', 'Choose a supported experiment mode.'); return; }
     stopPending(); const token = generation; timed = undefined;
+    metricRun = {}; metricParameters = { tool: 'simulator', run_mode: mode.value as 'batch' | 'timed', sample_size_bucket: sizeBucket(target) };
+    track('simulator_start', metricParameters, metricRun);
     active = true; root.dataset.state = 'running'; text(root, '[data-error]', ''); count.removeAttribute('aria-invalid'); update([], target);
     text(root, '[data-status]', `Started ${mode.value === 'timed' ? 'timed' : 'batch'} experiment.`);
     if (mode.value === 'timed') {

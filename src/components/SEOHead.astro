@@ -3,6 +3,7 @@ import { site } from '../data/site';
 import { siteConfig } from '../../config/site.mjs';
 import { canonicalUrl, serializeSchema } from '../../config/seo.mjs';
 import { pageSchema, type ArticleMetadata } from '../lib/structured-data';
+import { measurementConfig } from '../../config/measurement.mjs';
 interface Props { title: string; description: string; path?: string; type?: 'website' | 'article'; noindex?: boolean; article?: ArticleMetadata }
 const { title, description, path = Astro.url.pathname, type = 'website', noindex = false, article } = Astro.props;
 const pageTitle = title === site.name ? `${title}: Mechanics, Probability & Randomness` : `${title} | ${site.name}`;
@@ -13,6 +14,7 @@ const imageAlt = 'WinGo Learning Lab: the ten digits, their size groups, and ove
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#302b7c" />
+{measurementConfig.verificationToken && <meta name="google-site-verification" content={measurementConfig.verificationToken} />}
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
 {canonical && <link rel="canonical" href={canonical} />}

@@ -1,0 +1,12 @@
+---
+import { measurementConfig } from '../../config/measurement.mjs';
+import '../styles/consent.css';
+---
+<section class="consent-panel" data-consent hidden aria-labelledby="consent-heading" data-measurement-id={measurementConfig.measurementId} data-origin={measurementConfig.origin}>
+  <h2 id="consent-heading">Optional analytics</h2>
+  <p>Help us understand which guides and tools are useful. Analytics starts only if you allow it. Your learning tools work either way.</p>
+  <p class="consent-detail">Your choice can be remembered for 90 days in this browser. Turning analytics off reloads the page and clears the current in-memory experiment.</p>
+  <div class="consent-actions"><button type="button" data-consent-allow>Allow analytics</button><button type="button" data-consent-reject>Reject analytics</button><button type="button" data-consent-close hidden>Close settings</button><a href="/privacy-policy/#analytics-settings">Read privacy details</a></div>
+  <p role="status" data-consent-status></p>
+</section>
+<script>import '../scripts/analytics';</script>
