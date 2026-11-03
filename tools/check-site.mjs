@@ -4,8 +4,10 @@ import { resolve, join } from 'node:path';
 import { load } from 'cheerio';
 import { gzipSync } from 'node:zlib';
 import { routes } from './routes.mjs';
+import { siteConfig } from '../config/site.mjs';
+import { checkSEO } from './check-seo.mjs';
 
-const root = resolve('dist');
+const root = resolve(process.env.SITE_CHECK_DIR ?? 'dist');
 const htmlPath = route => route === '/404.html' ? join(root, '404.html') : join(root, route, 'index.html');
 const allRoutes = [...routes, '/404.html'];
 const pages = new Map(allRoutes.map(route => {
@@ -26,7 +28,6 @@ for (const [route, $] of pages) {
   assert(title && !titles.has(title), `${route}: missing/duplicate title`);
   assert(description && !descriptions.has(description), `${route}: missing/duplicate description`);
   titles.add(title); descriptions.add(description);
-  assert($('meta[name="robots"]').attr('content')?.includes('noindex'), `${route}: staged build must remain noindex`);
   $('a[href]').each((_, element) => {
     const href = $(element).attr('href');
     assert(href && href !== '#', `${route}: empty action`);
@@ -82,4 +83,5 @@ for (const [route, $] of pages) {
 const builtHtml = readdirSync(root, { recursive: true }).filter(file => String(file).endsWith('.html'));
 assert.equal(builtHtml.length, 15, 'Expected fourteen pages plus root 404');
 assert(pages.get('/wingo-rules/')('#color-classifications').length, 'Rules color anchor missing');
-console.log(`PASS: ${routes.length} public routes + 404; ${linksChecked} internal links/anchors; unique metadata; local assets; preview safeguards.`);
+checkSEO(pages, root, siteConfig);
+console.log(`PASS: ${routes.length} public routes + 404; ${linksChecked} internal links/anchors; unique metadata; local assets; environment indexing controls.`);

@@ -2,13 +2,14 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SEOHead from '../components/SEOHead.astro';
+import type { ArticleMetadata } from '../lib/structured-data';
 import '../styles/global.css';
-interface Props { title: string; description: string; type?: 'website' | 'article'; noindex?: boolean }
-const { title, description, type, noindex } = Astro.props;
+interface Props { title: string; description: string; type?: 'website' | 'article'; noindex?: boolean; article?: ArticleMetadata }
+const { title, description, type, noindex, article } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
-  <head><SEOHead title={title} description={description} type={type} noindex={noindex} /></head>
+  <head><SEOHead title={title} description={description} type={type} noindex={noindex} article={article} /></head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <Header />

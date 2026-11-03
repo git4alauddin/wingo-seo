@@ -1,5 +1,8 @@
 ---
+import { breadcrumbSchema } from '../lib/structured-data';
+import { serializeSchema } from '../../config/seo.mjs';
 interface Props { items: { label: string; href?: string }[] }
 const { items } = Astro.props;
 ---
 <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li>{items.map(item => <li>{item.href ? <a href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}</li>)}</ol></nav>
+<script type="application/ld+json" is:inline set:html={serializeSchema(breadcrumbSchema(items, Astro.url.pathname))} />

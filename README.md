@@ -4,11 +4,11 @@ An original educational website for learning number classifications, probability
 
 ## Current status
 
-**Phase 3: interactive educational tools implemented.** The Astro site contains the 14 planned pages, six original guides, responsive layouts, a working simulator and probability calculator, a randomness experiment, and a custom 404 page.
+**Phase 4: technical SEO implemented.** The Astro site includes 14 public pages, six guides, working educational tools, a custom 404, canonical/share metadata, structured data, sitemap/robots generation, and environment-specific indexing controls.
 
-The tools run locally in the browser. Timed/batch simulations, recorded replay, CSV export, event/sequence calculations, and sample-size comparisons use the documented model. No live deployment or analytics is enabled. All current builds remain `noindex` until the SEO release work is completed.
+The tools run locally in the browser. No live deployment or analytics is enabled. Default local/preview builds remain `noindex`; production indexing requires an explicit opt-in. Cloudflare preview/alias protection is generated but still needs live host verification after authorized deployment.
 
-The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md) and [Phase 3 report](docs/phase-3-report.md) for decisions, validation evidence, and phase boundaries. Earlier phase reports remain historical records.
+The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 4 report](docs/phase-4-report.md), and [technical SEO guide](docs/technical-seo.md) for decisions, evidence, and phase boundaries. Earlier reports remain historical records.
 
 ## Run locally
 
@@ -37,6 +37,7 @@ npm run check
 npm test
 npm run build
 npm run check:site
+npm run test:seo
 ```
 
 For the browser suite, install Chromium once, then run all checks:
@@ -58,7 +59,9 @@ The suite starts its own temporary server on port **4322**, without reusing an e
 
 Review screenshots, including populated tool states, are saved under `artifacts/screenshots/phase-3/`; failure traces/screenshots go under `test-results/`. Generated artifacts are ignored by Git. Automated accessibility checks supplement visual/keyboard review; they do not establish certification.
 
-`npm test` runs deterministic Vitest checks for classification, probability, statistics, random-source boundaries, cancellation, timers, replay, and export. GitHub Actions runs the full validation on pushes to `main` and pull requests. It validates without deploying.
+`npm test` runs deterministic Vitest checks for the tools, indexing configuration, canonical paths, sitemap XML, host rules, and safe structured-data serialization. `npm run test:seo` builds preview, indexable production, and inherited-production Cloudflare branch-preview profiles into ignored `artifacts/seo/` folders, then validates their actual output. It leaves default `dist/` untouched. Logs are saved alongside those folders.
+
+The full browser suite also verifies robots/sitemap HTTP responses, query-independent canonicals, share-image delivery, and 404 indexing behavior. GitHub Actions runs the full validation on pushes to `main` and pull requests, without deploying.
 
 ## Using the tools
 
@@ -73,6 +76,7 @@ Sampling uses browser `crypto.getRandomValues` with rejection mapping. If that A
 
 ```text
 config/site.mjs             validated build environment and proposed origin
+config/seo.mjs              canonical, sitemap, robots, and host-rule helpers
 src/components/             navigation, metadata, cards, diagrams, tables
 src/content/guides/         six original Markdown articles
 src/content.config.ts       schema-validated content collection
@@ -80,9 +84,9 @@ src/data/site.ts            site identity and classification reference data
 src/layouts/                base, article, and information layouts
 src/lib/                   model, probability, sampling, statistics, guide validation
 src/scripts/               page-specific browser controllers
-src/pages/                  static pages and generated article routes
+src/pages/                  pages, article routes, sitemap.xml and robots.txt
 src/styles/global.css      responsive design system
-public/                    original favicon and future public assets
+public/                    original favicon and social-card SVG/PNG
 tools/                     Astro launcher, route manifest, built-site checks
 tests/browser/             Playwright browser checks
 tests/unit/                deterministic mathematical and state tests
@@ -95,7 +99,7 @@ Articles live in `src/content/guides/`. The schema requires a title, description
 
 The layout supplies the only H1, publication context, table of contents, sources, related reading, and CTA. Start article Markdown at H2. Set `draft: true` to exclude an entry from routes and cards; references to unpublished related guides fail the build. When adding a published topic, deliberately update the allowed slugs and route manifest.
 
-Use genuine publication/revision dates and original examples. Keep synthetic-data captions visible. Preserve both color memberships on 0 and 5; overlapping color percentages are not an exclusive three-slice pie chart.
+Use genuine publication/revision dates and original examples. A supplied revision date must not precede publication; the article layout displays it and the schema uses the same value. Sitemap modification dates are omitted rather than invented. Keep synthetic-data captions visible and preserve both color memberships on 0 and 5.
 
 ## Environment and services
 
@@ -105,21 +109,26 @@ Use genuine publication/revision dates and original examples. Keep synthetic-dat
 | --- | --- |
 | `SITE_ENV` | `preview`; accepts `development`, `preview`, `production` |
 | `SITE_ORIGIN` | Proposed `https://learn.kalam.trade` for preview; explicitly required for a production-labeled build |
+| `SITE_INDEXABLE` | `false`; only literal `true` plus production environment can enable indexing |
 | `PLAYWRIGHT_CHANNEL` | Unset uses installed Playwright Chromium; `chrome` selects installed Google Chrome |
 
-Unknown environments and unintended origins fail configuration validation. **Indexability is deliberately off even for a production-labeled build in this phase.** Phase 4 will establish production/preview SEO behavior, sitemap, robots, structured data, and indexing eligibility.
+Unknown environments, invalid indexing flags, and unintended origins fail configuration validation. A production-labeled build without `SITE_INDEXABLE=true` stays excluded. Development/preview environments ignore an inherited true opt-in. Detected Cloudflare branches other than `main` stay excluded even if production settings were inherited; keep the branch guard consistent if the production branch changes.
+
+Indexable production builds emit fourteen canonical URLs in `/sitemap.xml`, advertise it from `/robots.txt`, and omit public-page `noindex`. Other profiles emit an empty, unadvertised sitemap and page-level `noindex`. The build also writes Cloudflare `_headers` and `_redirects`; Astro's local server does not apply those host-specific files. Known page aliases normalize without an SPA catch-all. See [technical SEO](docs/technical-seo.md) for exact behavior and release checks.
+
+The original 1200×630 share image is committed as PNG, with its editable SVG source. Regenerate it after changing the SVG using `npm run assets:social`; normal builds use the committed image.
 
 Contact details are pending owner input and disclosed honestly. There is no active contact form, invented email, GA4 script, course conversion link, external outcome feed, database, authentication, or payment integration. Privacy/terms describe the current implementation and will change when behavior changes.
 
-Cloudflare configuration and deployment documentation follow in Phase 6. The proposed subdomain has not been confirmed or changed. Privileged service connections, DNS changes, and production actions require the handoff's authorization. Never commit credentials or put secrets in public configuration.
+Cloudflare project connection, live host verification, and deployment documentation follow in Phase 6; generated static host rules are already prepared. The proposed subdomain has not been confirmed or changed. Privileged service connections, DNS changes, and production actions require the handoff's authorization. Never commit credentials or put secrets in public configuration.
 
 ## Phase workflow
 
 1. Research and architecture — complete.
 2. Core website and educational content — implemented; validation recorded in the phase report.
 3. Interactive educational tools — implemented; validation recorded in the phase report.
-4. Technical SEO — next.
-5. Analytics and measurement setup.
+4. Technical SEO — implemented; validation recorded in the phase report.
+5. Analytics and measurement setup — next.
 6. QA and authorized production deployment.
 7. Post-deployment baseline and monitoring over the first 30 days.
 

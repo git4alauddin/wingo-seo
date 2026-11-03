@@ -22,7 +22,7 @@ const guides = defineCollection({
     sources: z.array(z.object({ title: z.string(), url: z.url() })).min(1),
     cta: z.enum(['simulator', 'calculator']),
     draft: z.boolean().default(false),
-  }),
+  }).refine(data => !data.updatedDate || data.updatedDate >= data.pubDate, { message: 'A revision date cannot be earlier than publication.', path: ['updatedDate'] }),
 });
 
 export const collections = { guides };

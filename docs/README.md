@@ -25,6 +25,11 @@ All Phase 1 research is dated 2026-11-03. Statements about search results are ob
 - [Phase report, model implementation, and validation results](phase-3-report.md)
 - [Model and behavior specification](simulation-model.md)
 
+## Phase 4: technical SEO
+
+- [Phase report and validation results](phase-4-report.md)
+- [Technical SEO configuration and release checks](technical-seo.md)
+
 ## Later deliverables
 
 `analytics-events.md`, `search-console-setup.md`, `deployment.md`, and the post-deployment monitoring checklist will document the actual implementation when those phases are completed. Their absence at this stage is intentional; setup and deployment have not happened.
