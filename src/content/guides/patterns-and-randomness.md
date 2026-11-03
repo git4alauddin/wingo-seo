@@ -54,12 +54,12 @@ Describe what you saw accurately. Then separate that description from a claim th
 
 ## How a local random-number experiment works
 
-Software needs a mechanism to produce its samples. Our planned simulator uses the browser’s random-value API, maps accepted values uniformly onto digits, and derives all labels from each sampled digit. The explanation will remain available alongside the tool.
+Software needs a mechanism to produce its samples. Our simulator uses the browser’s random-value API, maps accepted values uniformly onto digits, and derives all labels from each sampled digit. The explanation remains available alongside the tool.
 
-Browser generators are software mechanisms, not mathematical proofs or certifications of an external game. A replay of recorded results will be deterministic and labeled as a replay. It is useful for reviewing an experiment, but it is not a new independent sample.
+Browser generators are software mechanisms, not mathematical proofs or certifications of an external game. A replay of recorded results is deterministic and labeled as a replay. It is useful for reviewing an experiment, but it is not a new independent sample.
 
 ## Compare frequencies with care
 
 A sample of 20 draws may differ substantially from a 50/50 split. With more draws, relative frequencies often move closer to the model’s probabilities, but they need not improve after every additional draw or in every larger sample.
 
-The [historical-analysis guide](/historical-analysis/) shows why a larger absolute count gap can coexist with a smaller percentage gap. The [simulator preview](/simulator/) introduces the local model. The illustrative comparison below is fixed teaching data; it does not generate outcomes yet.
+The [historical-analysis guide](/historical-analysis/) shows why a larger absolute count gap can coexist with a smaller percentage gap. The [simulator](/simulator/) lets you generate local samples. The comparison below begins with constructed examples; request two new samples to inspect generated counts and streaks.

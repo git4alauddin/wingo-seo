@@ -4,11 +4,11 @@ An original educational website for learning number classifications, probability
 
 ## Current status
 
-**Phase 2: core website and content implemented.** The Astro site contains the 14 planned pages, six original guides, reusable article layouts, responsive navigation, original diagrams, and a custom 404 page.
+**Phase 3: interactive educational tools implemented.** The Astro site contains the 14 planned pages, six original guides, responsive layouts, a working simulator and probability calculator, a randomness experiment, and a custom 404 page.
 
-The simulator, calculator, and randomness experiment are explicitly labeled **static previews**. Working controls arrive in Phase 3. No live deployment or analytics is enabled. All current builds remain `noindex` until the SEO release work is completed.
+The tools run locally in the browser. Timed/batch simulations, recorded replay, CSV export, event/sequence calculations, and sample-size comparisons use the documented model. No live deployment or analytics is enabled. All current builds remain `noindex` until the SEO release work is completed.
 
-The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 1 report](docs/phase-1-report.md), and [Phase 2 report](docs/phase-2-report.md) for decisions, evidence, and phase boundaries.
+The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md) and [Phase 3 report](docs/phase-3-report.md) for decisions, validation evidence, and phase boundaries. Earlier phase reports remain historical records.
 
 ## Run locally
 
@@ -34,6 +34,7 @@ These commands serve local files. They do not publish a site or modify DNS. Buil
 
 ```powershell
 npm run check
+npm test
 npm run build
 npm run check:site
 ```
@@ -53,11 +54,20 @@ npm run validate
 Remove-Item Env:PLAYWRIGHT_CHANNEL
 ```
 
-The suite starts its own temporary server on port **4322**, without reusing an existing server. Keep that port free. It checks desktop, tablet, and mobile-sized Chromium layouts, keyboard navigation, JavaScript-disabled content, preview disclosures, direct routes/refreshes, 404 behavior, and selected layouts with axe. Route checks block unexpected external requests.
+The suite starts its own temporary server on port **4322**, without reusing an existing server. Keep that port free. It checks desktop, tablet, and mobile-sized Chromium layouts, keyboard navigation, JavaScript-disabled content, tool controls, direct routes/refreshes, 404 behavior, and selected layouts with axe. It tests timers with a virtual clock, counts/replay/CSV against a test-only deterministic source, maximum samples, errors, cancellation, and privacy boundaries. Route and privacy checks block unexpected external requests.
 
-Review screenshots are saved under `artifacts/screenshots/phase-2/`; failure traces/screenshots go under `test-results/`. Generated artifacts are ignored by Git. Automated accessibility checks supplement visual/keyboard review; they do not establish certification.
+Review screenshots, including populated tool states, are saved under `artifacts/screenshots/phase-3/`; failure traces/screenshots go under `test-results/`. Generated artifacts are ignored by Git. Automated accessibility checks supplement visual/keyboard review; they do not establish certification.
 
-GitHub Actions runs the same checks on pushes to `main` and pull requests. It validates the site without deploying it. Runtime probability/simulation unit tests follow with the actual logic in Phase 3.
+`npm test` runs deterministic Vitest checks for classification, probability, statistics, random-source boundaries, cancellation, timers, replay, and export. GitHub Actions runs the full validation on pushes to `main` and pull requests. It validates without deploying.
+
+## Using the tools
+
+- **Simulator:** choose a batch of 1–10,000 draws or 1–100 five-second teaching rounds. Pause/resume timed runs, cancel pending work, and inspect full-run frequencies alongside at most 20 recent outcomes. Timed progression pauses while the page is hidden.
+- **Replay/export:** restore the last completed dataset without drawing again, or download it as CSV. A cancelled partial run does not replace that dataset. Reset clears the visible run and saved replay data; reload clears in-memory run history.
+- **Calculator:** calculate an exact digit, size/color event, or supported compound event. Enter 1–20 comma-separated ordered events for a specified block; this is not an anywhere-in-history streak calculation. Compare an event with a locally generated sample.
+- **Randomness:** generate separate samples of 20 and 2,000 digits to compare counts, relative gaps, and longest observed size runs. The next draw's theoretical size probability stays 50/50 under the model.
+
+Sampling uses browser `crypto.getRandomValues` with rejection mapping. If that API is unavailable, sampling is disabled with an explanation; mathematical calculations and static explanations remain available. Outcomes are not live external results or predictions. No outcomes are automatically persisted, and no tool data is sent to an external service. See the [model specification](docs/simulation-model.md).
 
 ## Project structure
 
@@ -68,12 +78,14 @@ src/content/guides/         six original Markdown articles
 src/content.config.ts       schema-validated content collection
 src/data/site.ts            site identity and classification reference data
 src/layouts/                base, article, and information layouts
-src/lib/guides.ts           publication and related-link validation
+src/lib/                   model, probability, sampling, statistics, guide validation
+src/scripts/               page-specific browser controllers
 src/pages/                  static pages and generated article routes
 src/styles/global.css      responsive design system
 public/                    original favicon and future public assets
 tools/                     Astro launcher, route manifest, built-site checks
 tests/browser/             Playwright browser checks
+tests/unit/                deterministic mathematical and state tests
 docs/                      research, plans, and phase reports
 ```
 
@@ -105,8 +117,8 @@ Cloudflare configuration and deployment documentation follow in Phase 6. The pro
 
 1. Research and architecture — complete.
 2. Core website and educational content — implemented; validation recorded in the phase report.
-3. Interactive educational tools — next.
-4. Technical SEO.
+3. Interactive educational tools — implemented; validation recorded in the phase report.
+4. Technical SEO — next.
 5. Analytics and measurement setup.
 6. QA and authorized production deployment.
 7. Post-deployment baseline and monitoring over the first 30 days.

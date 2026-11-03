@@ -1,0 +1,51 @@
+[hidden] { display: none !important; }
+.interactive-lab { min-width: 0; }
+.interactive-lab .model-notice { margin-block: 18px 25px; padding: 13px 15px; border-left: 3px solid var(--indigo); background: var(--indigo-soft); font-size: .78rem; line-height: 1.7; }
+.no-js-note { margin-top: 25px; padding: 18px; background: #f1eee6; font-size: .85rem; }
+.control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; min-width: 0; }
+.field label { font-size: .82rem; font-weight: 650; }
+.field select, .field input, .field textarea { width: 100%; min-width: 0; padding: 11px 12px; border: 1px solid #a6a2b4; border-radius: 5px; color: var(--ink); background: var(--white); font: inherit; font-size: .87rem; line-height: 1.5; }
+.field textarea { resize: vertical; }
+.field [aria-invalid="true"] { border-color: #a2223a; box-shadow: 0 0 0 1px #a2223a; }
+.field-help { display: block; font-size: .73rem; color: var(--muted); line-height: 1.7; }
+.tool-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-block: 18px; }
+.tool-actions .button, .interactive-lab button.button { font-size: .78rem; padding: 11px 15px; gap: 10px; cursor: pointer; }
+.interactive-lab button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.preset-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-block: 10px 18px; font-size: .73rem; }
+.preset-row > span { color: var(--muted); margin-right: 3px; }
+.preset-row button { border: 1px solid #c5bfd6; border-radius: 4px; color: var(--indigo); background: var(--indigo-soft); padding: 6px 10px; font-size: .73rem; cursor: pointer; }
+.tool-error { color: #a2223a; font-size: .8rem; overflow-wrap: anywhere; }
+.tool-error:not(:empty) { margin-block: 12px; padding: 10px 12px; background: #faedf0; border-radius: 4px; }
+.run-status { display: flex; gap: 12px; align-items: center; justify-content: space-between; border-block: 1px solid var(--line); padding-block: 15px; font-size: .78rem; margin-top: 22px; }
+[data-countdown] { white-space: nowrap; color: var(--indigo); font-variant-numeric: tabular-nums; }
+.secondary-actions { margin-top: 0; }
+.run-statistics { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 25px; }
+.run-statistics h3 { font-size: 1.25rem; }
+.result-heading { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.result-heading > span { font-size: .71rem; color: var(--muted); }
+.run-statistics .table-wrap { margin-block: 18px; }
+.frequency-table td:last-child { width: 38%; }
+.frequency-track { height: 10px; min-width: 55px; width: 100%; background: #e9e4f1; border-radius: 3px; overflow: hidden; }
+.frequency-track > span { display: block; height: 100%; background: var(--indigo); }
+.streak-summary { margin-block: 22px; font-size: .78rem; line-height: 1.7; color: var(--muted); }
+.streak-summary strong { color: var(--indigo); }
+.recent-outcomes { list-style: none; padding: 0; margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 9px 16px; }
+.recent-outcomes li { display: flex; gap: 9px; align-items: center; font-size: .66rem; line-height: 1.6; min-width: 0; }
+.recent-outcomes .digit { width: 28px; height: 28px; font-size: .85rem; }
+.calculation-result { background: var(--indigo-soft); border: 1px solid #d8d0e8; color: var(--indigo); border-radius: 6px; padding: 18px; margin-block: 18px; font-size: .89rem; line-height: 1.8; overflow-wrap: anywhere; min-height: 75px; }
+.calculator-section { margin-top: 30px; padding-top: 25px; border-top: 1px solid var(--line); }
+.calculator-section h3 { font-size: 1.3rem; margin-bottom: 13px; }
+.calculator-section > .field-help { margin-bottom: 18px; }
+.generated-samples { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 22px; }
+.generated-sample { border: 1px solid var(--line); border-radius: 8px; padding: 22px; background: var(--white); min-width: 0; }
+.prose .generated-sample h3 { font-size: 1.2rem; margin: 0; }
+.generated-sample > p { font-size: .8rem; line-height: 1.8; margin-top: 13px; }
+[data-randomness] [data-status] { font-size: .85rem; }
+@media (max-width: 600px) {
+  .control-grid, .generated-samples, .recent-outcomes { grid-template-columns: 1fr; }
+  .run-status { align-items: flex-start; flex-direction: column; }
+  .interactive-lab .tool-result { flex-direction: column; align-items: flex-start; }
+  .frequency-table th, .frequency-table td { padding-inline: 7px; }
+  .recent-outcomes li { font-size: .73rem; }
+}

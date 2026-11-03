@@ -59,7 +59,7 @@ Under a uniform model, Red has probability 50%, Green 50%, and Violet 20%. Their
 
 ## Round timing in this lab
 
-A timer organizes a demonstration; it does not define the classification or prove a random-generation method. The planned simulator will use short teaching rounds and batch experiments with a disclosed local model. The current page is a [static simulator preview](/simulator/), with no running timer.
+A timer organizes a demonstration; it does not define the classification or prove a random-generation method. The [simulator](/simulator/) uses five-second teaching rounds or batch experiments with a disclosed local model. It starts only when requested and pauses timed progression while the page is hidden.
 
 No account, wallet, stake, or external period identifier is required to study these rules. A generated local history will be labeled as simulated, and an illustrative example will remain labeled as an illustration.
 

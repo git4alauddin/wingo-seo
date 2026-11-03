@@ -28,7 +28,7 @@ test('all pages load directly, refresh, and fit the viewport', async ({ page }) 
   expect(external).toEqual([]);
 });
 
-test('navigation, keyboard skip link, and preview disclosure work', async ({ page, isMobile }) => {
+test('navigation, keyboard skip link, and educational tools are available', async ({ page, isMobile }) => {
   await page.goto('/');
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
@@ -47,19 +47,19 @@ test('navigation, keyboard skip link, and preview disclosure work', async ({ pag
   await page.getByRole('link', { name: 'Begin with the basics' }).click();
   await expect(page.locator('h1')).toContainText('What Is WinGo?');
   await page.goto('/simulator/');
-  await expect(page.getByText('Interactive experiment coming soon', { exact: true })).toBeVisible();
-  await expect(page.locator('input, select, button')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Start experiment', exact: true })).toBeVisible();
+  await expect(page.locator('[data-simulator] .model-notice')).toContainText('not live results');
   await page.goto('/probability-calculator/');
-  await expect(page.getByText('Interactive calculator coming soon', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Calculate event', exact: true })).toBeVisible();
 });
 
 test('core layouts have no detected WCAG A/AA violations and save review images', async ({ page }, testInfo) => {
-  await mkdir('artifacts/screenshots/phase-2', { recursive: true });
-  for (const [name, route] of [['home', '/'], ['guide', '/number-probability/'], ['simulator', '/simulator/'], ['guides', '/guides/']] as const) {
+  await mkdir('artifacts/screenshots/phase-3', { recursive: true });
+  for (const [name, route] of [['home', '/'], ['guide', '/number-probability/'], ['simulator', '/simulator/'], ['calculator', '/probability-calculator/'], ['randomness', '/patterns-and-randomness/']] as const) {
     await page.goto(route);
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
     expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
-    await page.screenshot({ path: `artifacts/screenshots/phase-2/${testInfo.project.name}-${name}.png`, fullPage: true, scale: 'css' });
+    await page.screenshot({ path: `artifacts/screenshots/phase-3/${testInfo.project.name}-${name}.png`, fullPage: true, scale: 'css' });
   }
 });
 
@@ -74,6 +74,12 @@ test('content and mobile navigation remain useful without JavaScript', async ({ 
     await page.getByRole('navigation', { name: 'Mobile navigation' }).getByRole('link', { name: 'Calculator', exact: true }).click();
     await expect(page).toHaveURL(/\/probability-calculator\/$/);
   }
+  await page.goto(`${baseURL}/simulator/`);
+  await expect(page.locator('[data-fallback]')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start experiment' })).toBeHidden();
+  await page.goto(`${baseURL}/probability-calculator/`);
+  await expect(page.locator('[data-fallback]')).toContainText('P(7) = 1/10 = 10%');
+  await expect(page.getByRole('button', { name: 'Calculate event' })).toBeHidden();
   await context.close();
 });
 

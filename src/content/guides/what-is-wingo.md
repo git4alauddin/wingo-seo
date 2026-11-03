@@ -44,7 +44,7 @@ The [complete rules guide](/wingo-rules/) lists all ten digits. You can use it a
 
 A round is a way to organize one outcome and the time around it. A timer may make a demonstration easier to follow, but a timer alone says nothing about how the number was selected.
 
-For our planned local experiment, one completed teaching round will produce one sampled digit. Its history will be a record of outcomes from that experiment, not a feed from an external game. At this stage, the [simulator page](/simulator/) shows a labeled static preview.
+In our local experiment, one completed teaching round produces one sampled digit. Its history records that experiment, not a feed from an external game. The [simulator](/simulator/) offers timed rounds and batch samples.
 
 The pace of a demonstration and its probability model are separate choices. Making the timer longer does not, by itself, change a digit’s chance in our uniform model.
 

@@ -1,0 +1,24 @@
+---
+import RunStatistics from './RunStatistics.astro';
+import '../styles/tools.css';
+---
+<section class="tool-panel interactive-lab" data-simulator aria-labelledby="simulator-title">
+  <div class="figure-topline"><span class="eyebrow">Model: uniform-digits-v1</span><span class="pill">Browser-only experiment</span></div>
+  <h2 id="simulator-title">Run a number experiment.</h2>
+  <p class="model-notice">Local educational simulation. Outcomes are generated in your browser using the stated model. They are not live results or predictions of an external game.</p>
+  <p class="no-js-note" data-fallback>Interactive controls require JavaScript and the browser random-value API. The model explanation and classification table below remain available.</p>
+  <div data-enhanced hidden>
+    <form data-run-form novalidate>
+      <div class="control-grid"><div class="field"><label for="sim-mode">Experiment mode</label><select id="sim-mode" name="mode"><option value="batch">Batch sample</option><option value="timed">Timed rounds · 5 seconds each</option></select></div><div class="field"><label for="sim-count" data-count-label>Sample size (1–10,000)</label><input id="sim-count" name="count" type="number" min="1" max="10000" step="1" value="20" aria-describedby="sim-count-help sim-error" /><span id="sim-count-help" class="field-help">Whole numbers only. Timed mode allows 1–100 rounds.</span></div></div>
+      <div class="preset-row" data-presets><span>Try a sample:</span>{[20, 200, 2000].map(n => <button type="button" data-preset={n}>{n.toLocaleString('en-US')}</button>)}</div>
+      <div class="tool-actions"><button class="button" type="submit" data-start>Start experiment</button><button class="button button-quiet" type="button" data-pause hidden>Pause</button><button class="button button-quiet" type="button" data-cancel disabled>Cancel run</button><button class="button button-quiet" type="button" data-reset>Reset</button></div>
+    </form>
+    <p id="sim-error" class="tool-error" role="alert" data-error></p>
+    <div class="run-status"><p role="status" aria-live="polite" data-status>Ready. No outcomes generated.</p><span data-countdown aria-hidden="true"></span></div>
+    <div class="tool-result"><span class="digit" data-latest aria-hidden="true">—</span><div><span class="small-label" data-result-kind>NO LOCAL OUTCOME YET</span><strong data-latest-label>Start when you’re ready.</strong><p data-progress>Nothing runs automatically.</p></div></div>
+    <div class="tool-actions secondary-actions"><button class="button button-quiet" type="button" data-replay disabled>Replay recorded run</button><button class="button button-quiet" type="button" data-export disabled>Export completed run (CSV)</button></div>
+    <p class="field-help">Replay restores the last completed dataset without drawing again. Reset clears it. Reloading clears all in-memory outcomes.</p>
+    <RunStatistics />
+  </div>
+</section>
+<script>import '../scripts/simulator';</script>

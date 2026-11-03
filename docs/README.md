@@ -20,6 +20,11 @@ All Phase 1 research is dated 2026-11-03. Statements about search results are ob
 - [Phase report, validation results, and local preview](phase-2-report.md)
 - [Root README: install, run, validate, and publish content](../README.md)
 
-## Documents delivered in later phases
+## Phase 3: interactive educational tools
+
+- [Phase report, model implementation, and validation results](phase-3-report.md)
+- [Model and behavior specification](simulation-model.md)
+
+## Later deliverables
 
 `analytics-events.md`, `search-console-setup.md`, `deployment.md`, and the post-deployment monitoring checklist will document the actual implementation when those phases are completed. Their absence at this stage is intentional; setup and deployment have not happened.

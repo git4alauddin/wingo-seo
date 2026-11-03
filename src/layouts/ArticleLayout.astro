@@ -12,7 +12,7 @@ const { data } = guide;
 const all = await publishedGuides();
 const related = data.related.map(slug => all.find(entry => entry.data.slug === slug)!);
 const date = data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-const cta = data.cta === 'simulator' ? { href: '/simulator/', label: 'Explore the simulator preview' } : { href: '/probability-calculator/', label: 'Explore the calculator preview' };
+const cta = data.cta === 'simulator' ? { href: '/simulator/', label: 'Explore the simulator' } : { href: '/probability-calculator/', label: 'Explore the calculator' };
 ---
 <BaseLayout title={data.title} description={data.description} type="article">
   <div class="container"><Breadcrumbs items={[{ label: 'Guides', href: '/guides/' }, { label: data.shortTitle }]} /></div>

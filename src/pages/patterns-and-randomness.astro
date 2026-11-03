@@ -1,0 +1,10 @@
+---
+import { render } from 'astro:content';
+import { publishedGuides } from '../lib/guides';
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import RandomnessLab from '../components/RandomnessLab.astro';
+const guide = (await publishedGuides()).find(guide => guide.data.slug === 'patterns-and-randomness');
+if (!guide) throw new Error('The randomness article must be published.');
+const { Content, headings } = await render(guide);
+---
+<ArticleLayout guide={guide} headings={[...headings, { depth: 2, slug: 'sample-experiment', text: 'Compare small and large samples' }]}><Content /><RandomnessLab /></ArticleLayout>

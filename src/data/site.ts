@@ -17,15 +17,4 @@ export const guideSlugs = [
   'number-probability', 'patterns-and-randomness', 'historical-analysis',
 ] as const;
 
-export const classifications = [
-  { digit: 0, size: 'Small', colors: ['Red', 'Violet'] },
-  { digit: 1, size: 'Small', colors: ['Green'] },
-  { digit: 2, size: 'Small', colors: ['Red'] },
-  { digit: 3, size: 'Small', colors: ['Green'] },
-  { digit: 4, size: 'Small', colors: ['Red'] },
-  { digit: 5, size: 'Big', colors: ['Green', 'Violet'] },
-  { digit: 6, size: 'Big', colors: ['Red'] },
-  { digit: 7, size: 'Big', colors: ['Green'] },
-  { digit: 8, size: 'Big', colors: ['Red'] },
-  { digit: 9, size: 'Big', colors: ['Green'] },
-] as const;
+export { classifications } from '../lib/model';

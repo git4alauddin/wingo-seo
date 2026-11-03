@@ -1,0 +1,13 @@
+---
+import { classifications } from '../lib/model';
+---
+<section class="run-statistics" aria-labelledby="run-statistics-title">
+  <div class="result-heading"><h3 id="run-statistics-title">Observed frequencies</h3><span data-sample-total>No draws yet</span></div>
+  <p class="field-help">All counts and percentages use the complete current run, not just the recent rows below. Expected digit frequency: 10%.</p>
+  <div class="table-wrap"><table class="frequency-table"><caption class="sr-only">Digit frequencies for the complete current run</caption><thead><tr><th scope="col">Digit</th><th scope="col">Count</th><th scope="col">Observed</th><th scope="col">Distribution</th></tr></thead><tbody>{classifications.map(row => <tr><th scope="row">{row.digit}</th><td data-digit-count={row.digit}>—</td><td data-digit-frequency={row.digit}>—</td><td><div class="frequency-track" aria-hidden="true"><span data-digit-bar={row.digit} style="width:0%"></span></div></td></tr>)}</tbody></table></div>
+  <div class="table-wrap"><table><caption>Size and color memberships · theoretical vs observed</caption><thead><tr><th scope="col">Group</th><th scope="col">Theoretical</th><th scope="col">Count</th><th scope="col">Observed</th></tr></thead><tbody>{['Small', 'Big', 'Red', 'Green', 'Violet'].map(label => <tr><th scope="row">{label}</th><td>{label === 'Violet' ? '20%' : '50%'}</td><td data-group-count={label}>—</td><td data-group-frequency={label}>—</td></tr>)}</tbody></table></div>
+  <p class="field-help">Color memberships overlap: 0 is Red + Violet, 5 is Green + Violet. Color percentages can sum to more than 100%.</p>
+  <p class="streak-summary">Longest observed Big or Small run: <strong data-longest-run>—</strong>. A description of this sample, not a forecast.</p>
+  <h3>Recent local outcomes</h3><p class="field-help">Latest first. Shows at most 20 outcomes; statistics above use the entire run.</p>
+  <ol class="recent-outcomes" data-recent><li>No local outcomes yet.</li></ol>
+</section>

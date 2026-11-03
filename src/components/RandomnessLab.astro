@@ -1,0 +1,12 @@
+---
+import SampleComparison from './SampleComparison.astro';
+import '../styles/tools.css';
+---
+<section class="inline-experiment interactive-lab" data-randomness aria-labelledby="sample-experiment">
+  <h2 id="sample-experiment">Compare small and large samples</h2><p>Generate two separate samples: 20 and 2,000 draws. They are not nested. Each assumes independent, equally likely digits. The next draw’s theoretical Small/Big chance remains 50%, regardless of either history.</p>
+  <p class="model-notice">Local educational simulation in your browser. These samples are not external live results or predictions.</p>
+  <div data-illustration><SampleComparison compact /></div>
+  <p class="no-js-note" data-fallback>JavaScript and the browser random-value API enable new samples. The constructed examples above remain useful without them.</p>
+  <div data-enhanced hidden><div class="tool-actions"><button class="button" type="button" data-generate>Generate two samples</button><button class="button button-quiet" type="button" data-cancel disabled>Cancel sampling</button></div><p class="tool-error" role="alert" data-error></p><p role="status" data-status>No generated samples yet. The examples above are constructed.</p><div class="generated-samples" data-results hidden></div></div>
+</section>
+<script>import '../scripts/randomness';</script>

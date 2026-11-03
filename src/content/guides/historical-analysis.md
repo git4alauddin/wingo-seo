@@ -22,7 +22,7 @@ sources:
 
 Before reading a chart, ask where the numbers came from. Were they generated locally, constructed for teaching, or recorded elsewhere? How many results are included? Has anything been omitted?
 
-This lab uses synthetic examples and, when interactive tools are available, locally generated samples. It does not collect external game histories. The following 20 digits are a **constructed teaching dataset**, not live results or a claimed random sample:
+This lab uses synthetic examples and, locally generated samples. It does not collect external game histories. The following 20 digits are a **constructed teaching dataset**, not live results or a claimed random sample:
 
 `0, 7, 2, 4, 8, 0, 1, 5, 3, 2, 9, 1, 4, 6, 3, 0, 7, 6, 5, 4`
 
@@ -57,7 +57,7 @@ Under our uniform model, the expected count for each exact digit in 20 independe
 
 An expectation is a model-based average, not a demand that every sample match it. A digit appearing three times is not a contradiction of a 10% probability. Nor does a digit appearing once become more likely on the next independent draw.
 
-The example data is constructed, so its uneven counts illustrate the arithmetic rather than provide experimental evidence about randomness. Actual sampling behavior will be studied with labeled generated runs.
+The example data is constructed, so its uneven counts illustrate the arithmetic rather than provide experimental evidence about randomness. You can study sampling variation with labeled generated runs in the simulator.
 
 ## Absolute gaps and relative gaps
 
@@ -76,4 +76,4 @@ A line connecting digits can make an arbitrary sequence appear to rise, fall, or
 
 Changing the visible window also changes the question. A chart of the last 20 outcomes describes those 20, not necessarily all outcomes in the experiment. Keep the window size and denominator visible, and do not select only the most striking section of a history.
 
-The [patterns and randomness guide](/patterns-and-randomness/) explains why streaks need careful interpretation. The [simulator preview](/simulator/) shows the model that our future generated samples will use. Read the data fully, state its origin, and keep the next-draw claim separate.
+The [patterns and randomness guide](/patterns-and-randomness/) explains why streaks need careful interpretation. The [simulator](/simulator/) produces local samples using the disclosed model. Read the data fully, state its origin, and keep the next-draw claim separate.

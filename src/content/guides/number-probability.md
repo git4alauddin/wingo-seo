@@ -74,4 +74,4 @@ The [patterns and randomness guide](/patterns-and-randomness/) explains why repe
 
 A responsible calculation states the digit range, equal-likelihood assumption, event definition, and any independence assumption. It also distinguishes the theoretical answer from an observed sample frequency.
 
-The [calculator preview](/probability-calculator/) shows this structure with a fixed example. Its future interactive version will use the same rules. None of these formulas proves that an outside service follows our model or that its next result can be known in advance.
+The [calculator](/probability-calculator/) makes this structure explicit for individual events and ordered sequences, and can compare a theoretical value with a local sample. None of these formulas proves that an outside service follows our model or that its next result can be known in advance.

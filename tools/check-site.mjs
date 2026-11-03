@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { load } from 'cheerio';
+import { gzipSync } from 'node:zlib';
 import { routes } from './routes.mjs';
 
 const root = resolve('dist');
@@ -15,6 +16,7 @@ const pages = new Map(allRoutes.map(route => {
 const titles = new Set();
 const descriptions = new Set();
 let linksChecked = 0;
+const toolRoutes = ['/simulator/', '/probability-calculator/', '/patterns-and-randomness/'];
 for (const [route, $] of pages) {
   assert.equal($('html').attr('lang'), 'en', `${route}: missing language`);
   assert.equal($('main').length, 1, `${route}: main landmark`);
@@ -44,13 +46,40 @@ for (const [route, $] of pages) {
     const url = new URL(href, `https://local.test${route}`);
     assert(existsSync(resolve(root, `.${url.pathname}`)), `${route}: missing asset ${href}`);
   });
-  assert.equal($('script[src^="http"], iframe, form').length, 0, `${route}: unexpected service or form in Phase 2`);
+  assert.equal($('script[src^="http"], iframe').length, 0, `${route}: unexpected external service`);
+  if (toolRoutes.includes(route)) {
+    assert($('[data-enhanced][hidden]').length, `${route}: JavaScript-only controls must start hidden`);
+    assert($('[data-fallback]').text().includes('JavaScript'), `${route}: missing no-JavaScript explanation`);
+    assert($('script[src]').length, `${route}: missing tool bundle`);
+  } else {
+    assert.equal($('script[src], form').length, 0, `${route}: non-tool route should not ship interactive JavaScript`);
+  }
+  // Count the route's entry modules, their shared chunks, and its styles.
+  const visited = new Set();
+  let jsBytes = 0, cssBytes = 0;
+  function measure(asset) {
+    if (visited.has(asset)) return;
+    visited.add(asset);
+    const content = readFileSync(resolve(root, `.${asset}`));
+    if (asset.endsWith('.css')) cssBytes += gzipSync(content).length;
+    if (asset.endsWith('.js')) {
+      jsBytes += gzipSync(content).length;
+      for (const match of content.toString().matchAll(/(?:from\s*|import\s*|import\s*\()\s*["']([^"']+\.js)["']/g)) {
+        const dependency = new URL(match[1], `https://local.test${asset}`).pathname;
+        measure(dependency);
+      }
+    }
+  }
+  $('script[src], link[rel="stylesheet"][href], link[rel="modulepreload"][href]').each((_, element) => {
+    const asset = $(element).attr('src') ?? $(element).attr('href');
+    if (asset?.startsWith('/')) measure(asset);
+  });
+  $('style').each((_, element) => { cssBytes += gzipSync($(element).html() ?? '').length; });
+  assert(jsBytes <= (toolRoutes.includes(route) ? 80 : 30) * 1024, `${route}: JavaScript budget exceeded`);
+  assert(cssBytes <= 40 * 1024, `${route}: CSS budget exceeded`);
+  console.log(`${route}: JS ${jsBytes} bytes gzip, CSS ${cssBytes} bytes gzip`);
 }
 const builtHtml = readdirSync(root, { recursive: true }).filter(file => String(file).endsWith('.html'));
 assert.equal(builtHtml.length, 15, 'Expected fourteen pages plus root 404');
 assert(pages.get('/wingo-rules/')('#color-classifications').length, 'Rules color anchor missing');
-for (const route of ['/simulator/', '/probability-calculator/']) {
-  assert(pages.get(route)('.coming-soon').text().includes('coming soon'), `${route}: disclose preview status`);
-  assert.equal(pages.get(route)('button, input, select').length, 0, `${route}: no pretend controls`);
-}
 console.log(`PASS: ${routes.length} public routes + 404; ${linksChecked} internal links/anchors; unique metadata; local assets; preview safeguards.`);

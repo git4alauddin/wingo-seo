@@ -1,6 +1,6 @@
 # Educational simulation and probability model
 
-Decision date: 2026-11-03. Model identifier: `uniform-digits-v1`. This is a specification for Phase 3; no tools are implemented yet.
+Decision date: 2026-11-03. Model identifier: `uniform-digits-v1`. This specification is implemented in Phase 3; see the [phase report](phase-3-report.md) for validation and limitations. Future-tense requirements below describe the implementation contract, not a pending implementation.
 
 ## Assumptions and classification
 

@@ -61,4 +61,4 @@ That calculation does not cover finding the sequence somewhere in a history of 1
 
 Big and Small offer a simple bridge from ten digits to a binary event. They help explain counting, relative frequency, independence, and sequences without adding unnecessary financial choices.
 
-See the [calculator preview](/probability-calculator/) for a worked example, or check the [complete rules](/wingo-rules/) to understand how size and color relate to the same digit. None of these calculations establishes how an external service actually generates its results.
+See the [calculator](/probability-calculator/) for a worked example, or check the [complete rules](/wingo-rules/) to understand how size and color relate to the same digit. None of these calculations establishes how an external service actually generates its results.
