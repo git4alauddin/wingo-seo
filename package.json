@@ -1,0 +1,29 @@
+{
+  "name": "wingo-seo-lab",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "node tools/astro.mjs dev --host 127.0.0.1",
+    "check": "node tools/astro.mjs check",
+    "build": "node tools/astro.mjs build",
+    "preview": "node tools/astro.mjs preview --host 127.0.0.1",
+    "check:site": "node tools/check-site.mjs",
+    "test:browser": "playwright test",
+    "validate": "npm run check && npm run build && npm run check:site && npm run test:browser"
+  },
+  "dependencies": {
+    "astro": "7.4.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "cheerio": "1.2.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,6 @@
+---
+import { classifications } from '../data/site';
+---
+<div class="number-grid" role="list" aria-label="The ten digits and their classifications">
+  {classifications.map(row => <div class="number-cell" role="listitem"><span class:list={['digit', row.colors[0].toLowerCase(), { dual: row.colors.length > 1 }]} aria-hidden="true">{row.digit}</span><span class="number-label"><strong>{row.digit} · {row.size}</strong><span>{row.colors.join(' + ')}</span></span></div>)}
+</div>

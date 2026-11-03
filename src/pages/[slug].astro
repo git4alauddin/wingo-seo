@@ -1,0 +1,18 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { render } from 'astro:content';
+import { publishedGuides } from '../lib/guides';
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import SampleComparison from '../components/SampleComparison.astro';
+export const getStaticPaths = (async () => {
+  const guides = await publishedGuides();
+  return guides.map(guide => ({ params: { slug: guide.data.slug }, props: { guide } }));
+}) satisfies GetStaticPaths;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
+---
+<ArticleLayout guide={guide} headings={headings}>
+  <Content />
+  {guide.data.slug === 'patterns-and-randomness' && <section class="inline-experiment" aria-labelledby="sample-preview"><h2 id="sample-preview">Compare two illustrative samples</h2><p>The smaller example has a larger relative imbalance. This pair illustrates a possibility, not a rule that the larger sample must always be closer.</p><SampleComparison compact /><p class="preview-note">Interactive experiment coming soon. This preview does not generate outcomes.</p></section>}
+</ArticleLayout>

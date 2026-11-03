@@ -1,0 +1,4 @@
+---
+import { classifications } from '../data/site';
+---
+<div class="table-wrap"><table><caption>Example ruleset used throughout this lab</caption><thead><tr><th scope="col">Number</th><th scope="col">Size</th><th scope="col">Color membership</th></tr></thead><tbody>{classifications.map(row => <tr><th scope="row">{row.digit}</th><td>{row.size}</td><td>{row.colors.map(color => <span class:list={['color-tag', color.toLowerCase()]}>{color}</span>)}</td></tr>)}</tbody></table></div>

@@ -15,6 +15,11 @@ The [handoff](../handoff.txt) remains the authoritative specification. These doc
 
 All Phase 1 research is dated 2026-11-03. Statements about search results are observations from that research session, not permanent rankings or measured search volumes.
 
+## Phase 2: core website and content
+
+- [Phase report, validation results, and local preview](phase-2-report.md)
+- [Root README: install, run, validate, and publish content](../README.md)
+
 ## Documents delivered in later phases
 
 `analytics-events.md`, `search-console-setup.md`, `deployment.md`, and the post-deployment monitoring checklist will document the actual implementation when those phases are completed. Their absence at this stage is intentional; setup and deployment have not happened.

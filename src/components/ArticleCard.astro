@@ -1,0 +1,12 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+interface Props { guide: CollectionEntry<'guides'> }
+const { guide } = Astro.props;
+---
+<article class="article-card">
+  <div class="card-top"><span class="eyebrow">{guide.data.topic}</span><span class="reading-time">{guide.data.minutes} min read</span></div>
+  <h3><a href={`/${guide.data.slug}/`}>{guide.data.shortTitle}</a></h3>
+  <p>{guide.data.summary}</p>
+  <a class="text-link" href={`/${guide.data.slug}/`}>Read the guide <Icon /></a>
+</article>

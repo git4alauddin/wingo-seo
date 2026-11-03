@@ -1,0 +1,21 @@
+---
+import { site } from '../data/site';
+import { siteConfig } from '../../config/site.mjs';
+interface Props { title: string; description: string; path?: string; type?: 'website' | 'article'; noindex?: boolean }
+const { title, description, path = Astro.url.pathname, type = 'website', noindex = false } = Astro.props;
+const pageTitle = title === site.name ? `${title}: Mechanics, Probability & Randomness` : `${title} | ${site.name}`;
+const canonical = new URL(path, siteConfig.origin).href;
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#302b7c" />
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{(!siteConfig.indexable || noindex) && <meta name="robots" content="noindex, follow" />}
+<meta property="og:type" content={type} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={site.name} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
