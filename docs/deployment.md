@@ -2,6 +2,8 @@
 
 Updated 4 November 2026. The owner selected Workers after the dashboard offered Workers setup. This supersedes the earlier Pages deployment plan. The Astro site remains static; no SSR adapter, application server, database, or hand-written Worker entry point is needed.
 
+**Current hosting decision:** the owner uses only `https://dmplay.kalam.trade/`, with no active Workers URL. `workers_dev` and `preview_urls` are now explicitly false so later deployments preserve that choice. Alias/preview checks below apply only if those hosts are deliberately reenabled; no alternate URL is required for this custom-domain-only release. The initial live review confirmed fourteen correct canonical routes and, after owner disablement of injected Insights, no external requests in the sampled browser navigation. Next, enable production indexing through the build settings and verify the resulting public headers and sitemap.
+
 ## Why the first deployment failed
 
 The build and generated-site checks passed. Deployment ran `npx wrangler deploy`, but `wrangler.jsonc` declared Pages output with `pages_build_output_dir`. Workers could not find its script or assets directory. The configuration now uses Workers `assets.directory: ./dist`, automatic directory trailing slashes, and `not_found_handling: 404-page`. Existing `_headers` and `_redirects` apply to static asset responses. [Cloudflare static hosting configuration](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/).
@@ -37,7 +39,7 @@ WRANGLER_SEND_METRICS=false
 
 These must be available during the build, rather than only as runtime Worker bindings. Leave the measurement ID, verification token, contact email, and course URL empty until owner-approved values are supplied. Use the same safe values for nonproduction branches. `WORKERS_CI=1` and `WORKERS_CI_BRANCH` are injected by Workers Builds; non-main or missing branch information overrides inherited production settings and disables indexing/analytics. Keep this guard synchronized if the production branch changes. [Build environment reference](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/).
 
-Retry the latest commit once these settings are saved. Review the resulting `https://wingo-seo.ACCOUNT.workers.dev` URL before attaching the custom hostname. That address is deliberately excluded from search, and analytics remains off. `preview_urls: true` enables review URLs; Worker observability is disabled in this configuration. Review any separately enabled Cloudflare analytics, Zaraz, or injected scripts before launch.
+The owner has already attached `dmplay.kalam.trade` and disabled alternate Workers URLs. Review that hostname after rebuilding. Worker observability is disabled in this configuration. Keep separately injected Cloudflare analytics, Zaraz, and other scripts off unless deliberately reviewed and enabled.
 
 ## Local validation
 
