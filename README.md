@@ -4,11 +4,11 @@ An original educational website for learning number classifications, probability
 
 ## Current status
 
-**Phase 5: configurable analytics implemented.** The Astro site includes 14 public pages, six guides, working educational tools, technical SEO, and consent-based GA4 instrumentation with Search Console verification support and setup instructions.
+**Phase 6: local QA and deployment preparation implemented; public deployment pending.** The Astro site includes 14 public pages, six guides, working educational tools, technical SEO, configurable analytics, production-candidate builds, Lighthouse diagnostics, and a read-only live release checker.
 
 The tools run locally in the browser. No live deployment or analytics is enabled. Default local/preview builds remain `noindex`; production indexing requires an explicit opt-in. Cloudflare preview/alias protection is generated but still needs live host verification after authorized deployment.
 
-The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 5 report](docs/phase-5-report.md), [analytics guide](docs/analytics-events.md), and [Search Console setup](docs/search-console-setup.md) for decisions, evidence, and pending account steps. Earlier reports remain historical records.
+The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 6 report](docs/phase-6-report.md), [deployment runbook](docs/deployment.md), and [performance evidence](docs/performance.md) for release preparation and pending owner steps. Earlier reports remain historical records.
 
 ## Run locally
 
@@ -65,6 +65,17 @@ Analytics browser checks intercept every request and substitute a local tag stub
 
 The full browser suite also verifies robots/sitemap HTTP responses, query-independent canonicals, share-image delivery, and 404 indexing behavior. GitHub Actions runs the full validation on pushes to `main` and pull requests, without deploying.
 
+Phase 6 adds 320px reflow, 200% text resizing, reduced-motion, and keyboard checks. To build an indexable local production candidate and run mobile/desktop Lighthouse audits:
+
+```powershell
+npm run build:release
+npm run test:performance
+```
+
+`test:performance` includes the candidate build itself. These commands write to ignored `artifacts/release/` and `artifacts/lighthouse/`, leave default `dist/` untouched, and upload nothing. The candidate clears analytics and optional owner configuration. Select Chrome with `PLAYWRIGHT_CHANNEL=chrome` as above, or install Playwright Chromium. CI also runs the performance checks. Local scores do not establish field Core Web Vitals; see the [performance guide](docs/performance.md).
+
+After authorized publication, `npm run check:release -- --production https://learn.kalam.trade --alias https://PROJECT.pages.dev --preview https://BRANCH.PROJECT.pages.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample Pages hosts with real matching hosts. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact build/environment settings, authorization, host verification, and rollback.
+
 ## Using the tools
 
 - **Simulator:** choose a batch of 1–10,000 draws or 1–100 five-second teaching rounds. Pause/resume timed runs, cancel pending work, and inspect full-run frequencies alongside at most 20 recent outcomes. Timed progression pauses while the page is hidden.
@@ -80,6 +91,7 @@ Sampling uses browser `crypto.getRandomValues` with rejection mapping. If that A
 config/site.mjs             validated build environment and proposed origin
 config/seo.mjs              canonical, sitemap, robots, and host-rule helpers
 config/measurement.mjs      analytics gates and optional public destinations
+wrangler.jsonc             proposed separate Cloudflare Pages project and static output
 src/components/             navigation, metadata, cards, diagrams, tables
 src/content/guides/         six original Markdown articles
 src/content.config.ts       schema-validated content collection
@@ -129,7 +141,7 @@ The original 1200×630 share image is committed as PNG, with its editable SVG so
 
 Contact details and course links remain absent by default. Live GA4 remains disabled, and Search Console has not been verified. When deliberately activated, the consent panel allows rejection and later withdrawal; tool usage works with analytics off. See the [event contract and owner activation checklist](docs/analytics-events.md). There is no contact form, invented email, external outcome feed, database, authentication, or payment integration.
 
-Cloudflare project connection, live host verification, and deployment documentation follow in Phase 6; generated static host rules are already prepared. The proposed subdomain has not been confirmed or changed. Privileged service connections, DNS changes, and production actions require the handoff's authorization. Never commit credentials or put secrets in public configuration.
+Cloudflare configuration and the deployment runbook are prepared. Project connection, domain confirmation, authorized publication, and live host verification remain pending. Connecting Pages Git integration can publish automatically on push; review that change in behavior before enabling it. Privileged service connections, DNS changes, and production actions require the handoff's authorization. Never commit credentials or put secrets in public configuration.
 
 ## Phase workflow
 
@@ -138,7 +150,7 @@ Cloudflare project connection, live host verification, and deployment documentat
 3. Interactive educational tools — implemented; validation recorded in the phase report.
 4. Technical SEO — implemented; validation recorded in the phase report.
 5. Analytics instrumentation and Search Console preparation — implemented; live activation pending owner configuration.
-6. QA and authorized production deployment.
+6. Local QA and deployment preparation — implemented; authorized public release and live checks pending.
 7. Post-deployment baseline and monitoring over the first 30 days.
 
 Each phase ends with validation, a brief learning recap, and a commit/push. Google Ads, certification applications, billing, and spend are separate future work. The site does not offer real-money gambling, operator referrals, or predictions of external results.

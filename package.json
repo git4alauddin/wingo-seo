@@ -1,6 +1,6 @@
 {
   "name": "wingo-seo-lab",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -10,10 +10,13 @@
     "dev": "node tools/astro.mjs dev --host 127.0.0.1",
     "check": "node tools/astro.mjs check",
     "build": "node tools/astro.mjs build",
+    "build:release": "node tools/build-release.mjs",
     "preview": "node tools/astro.mjs preview --host 127.0.0.1",
     "check:site": "node tools/check-site.mjs",
+    "check:release": "node tools/check-release.mjs",
     "assets:social": "node tools/generate-social.mjs",
     "test:seo": "node tools/check-seo-builds.mjs",
+    "test:performance": "npm run build:release && node tools/check-performance.mjs",
     "test:browser": "playwright test",
     "test": "vitest run",
     "validate": "npm run check && npm test && npm run build && npm run check:site && npm run test:seo && npm run test:browser"
@@ -27,8 +30,10 @@
     "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "cheerio": "1.2.0",
+    "chrome-launcher": "1.2.2",
     "fast-xml-parser": "5.12.0",
     "fast-xml-validator": "1.4.2",
+    "lighthouse": "13.5.0",
     "sharp": "0.35.5",
     "typescript": "5.9.3",
     "vitest": "5.1.0"
