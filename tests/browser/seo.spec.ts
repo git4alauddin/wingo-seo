@@ -15,7 +15,7 @@ test('preview responses expose crawlable rules and an empty, unadvertised sitema
 test('query parameters do not change canonical metadata or visible article identity', async ({ page, request }) => {
   await page.goto('/number-probability/?utm_source=seo-check&sample=7');
   const head = page.locator('head');
-  await expect(head.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://learn.kalam.trade/number-probability/');
+  await expect(head.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://dmplay.kalam.trade/number-probability/');
   await expect(head.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
   const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
   const nodes = scripts.flatMap(text => { const data = JSON.parse(text); return data['@graph'] ?? [data]; });
@@ -23,7 +23,7 @@ test('query parameters do not change canonical metadata or visible article ident
   expect(article.headline).toBe(await page.locator('h1').textContent());
   expect(article.datePublished).toBe(await page.locator('.publisher-line time').first().getAttribute('datetime'));
   const response = await request.get('/wingo-rules/index.html'); expect(response.status()).toBe(200);
-  const $ = load(await response.text()); expect($('link[rel="canonical"]').attr('href')).toBe('https://learn.kalam.trade/wingo-rules/');
+  const $ = load(await response.text()); expect($('link[rel="canonical"]').attr('href')).toBe('https://dmplay.kalam.trade/wingo-rules/');
 });
 
 test('share image is available locally and missing pages keep their 404/noindex response', async ({ request }) => {

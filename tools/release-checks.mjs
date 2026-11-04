@@ -4,7 +4,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { routes } from './routes.mjs';
 
 export function releaseTargets(args) {
-  assert.equal(args.length, 6, 'Usage: npm run check:release -- --production https://learn.kalam.trade --alias https://WORKER.ACCOUNT.workers.dev --preview https://BRANCH-WORKER.ACCOUNT.workers.dev');
+  assert.equal(args.length, 6, 'Usage: npm run check:release -- --production https://dmplay.kalam.trade --alias https://WORKER.ACCOUNT.workers.dev --preview https://BRANCH-WORKER.ACCOUNT.workers.dev');
   const values = {};
   for (let i = 0; i < args.length; i += 2) {
     assert(['--production', '--alias', '--preview'].includes(args[i]) && !values[args[i]], 'Supply each release target exactly once.');
@@ -12,7 +12,7 @@ export function releaseTargets(args) {
     assert(url.protocol === 'https:' && !url.username && !url.password && !url.search && !url.hash && url.pathname === '/' && !url.port, 'Release targets must be plain HTTPS origins.');
     values[args[i]] = url.origin;
   }
-  assert.equal(values['--production'], 'https://learn.kalam.trade', 'Production target must match the configured project origin.');
+  assert.equal(values['--production'], 'https://dmplay.kalam.trade', 'Production target must match the configured project origin.');
   const alias = new URL(values['--alias']), preview = new URL(values['--preview']);
   if (/^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*\.workers\.dev$/.test(alias.hostname)) {
     const [worker, account] = alias.hostname.split('.');

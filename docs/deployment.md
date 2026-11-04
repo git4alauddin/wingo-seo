@@ -28,7 +28,7 @@ In the Worker's **Settings → Build → Variables and secrets** (build-time var
 ```text
 NODE_VERSION=24.19.0
 SITE_ENV=preview
-SITE_ORIGIN=https://learn.kalam.trade
+SITE_ORIGIN=https://dmplay.kalam.trade
 SITE_INDEXABLE=false
 ANALYTICS_ENABLED=false
 ANALYTICS_CONSENT_MODE=unconfigured
@@ -54,10 +54,10 @@ Alternatively, install Playwright Chromium and leave the channel unset. Browser 
 
 ## Approved custom-domain release
 
-1. Confirm `learn.kalam.trade` and authorized Cloudflare access. Inspect existing DNS, Worker routes, and custom domains for conflicts; absence from public DNS does not prove availability. Preserve the course website, old simulator, and all unrelated records.
+1. Confirm `dmplay.kalam.trade` and authorized Cloudflare access. Inspect existing DNS, Worker routes, and custom domains for conflicts; absence from public DNS does not prove availability. Preserve the course website, old simulator, and all unrelated records.
 2. Review the hosted Worker, content/contact status, privacy, routing, tools, and network requests. Keep analytics off for the initial release.
 3. Obtain explicit approval for attaching this Worker to the confirmed domain and for any DNS/account change. Use the Worker's **Domains & Routes → Add → Custom Domain** workflow for the new subdomain, inspecting the proposed change before confirming it. Wait for domain/certificate activation and verify HTTPS. No custom-domain route is currently committed, so the deploy command itself does not attach that hostname.
-4. Only after the domain and release are approved, set production build variables `SITE_ENV=production`, `SITE_ORIGIN=https://learn.kalam.trade`, and `SITE_INDEXABLE=true`. Keep `ANALYTICS_ENABLED=false`. Rebuild/deploy the validated commit. Preview variables must remain excluded.
+4. Only after the domain and release are approved, set production build variables `SITE_ENV=production`, `SITE_ORIGIN=https://dmplay.kalam.trade`, and `SITE_INDEXABLE=true`. Keep `ANALYTICS_ENABLED=false`. Rebuild/deploy the validated commit. Preview variables must remain excluded.
 5. Verify the actual custom host, stable Workers alias, and branch/version hosts. Host-specific `_headers` protect Workers aliases without applying a global production noindex. The analytics runtime also requires the exact configured origin. [Static headers](https://developers.cloudflare.com/workers/static-assets/headers/), [Workers preview URL formats](https://developers.cloudflare.com/workers/previews/custom-domains/).
 
 Owner authorization remains required by the [handoff](../handoff.txt) for production DNS changes, privileged service connections, account changes, and publishing to existing production infrastructure. The owner has requested the Workers hosting approach; this does not authorize modifying other sites or attaching an unconfirmed custom domain.
@@ -67,7 +67,7 @@ Owner authorization remains required by the [handoff](../handoff.txt) for produc
 After authorized custom-domain deployment, use actual matching hosts:
 
 ```powershell
-npm run check:release -- --production https://learn.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev
+npm run check:release -- --production https://dmplay.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev
 ```
 
 The checker accepts matching Workers hosts and legacy Pages hosts. It performs 33 read-only HTTP check groups: HTTPS upgrade, fourteen direct pages, metadata/canonicals/indexing, sitemap/robots, canonical redirects, actual missing-path 404s, PNG and CSS/JS delivery, alias exclusion, and branch-preview exclusion/empty sitemap. It does not execute browser code or change account settings. Results go to `artifacts/release-check/latest.json`. Protected preview redirects fail the public checker intentionally; inspect through authorized access and record that exception.

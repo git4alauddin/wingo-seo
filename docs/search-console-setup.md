@@ -4,7 +4,7 @@ Prepared 3 November 2026. **Pending owner access and an authorized public deploy
 
 ## Property and verification
 
-The proposed origin remains `https://learn.kalam.trade`. Confirm it with the owner before release. Prefer a URL-prefix property for `https://learn.kalam.trade/` to scope this experiment to its exact HTTPS host. If the owner already has an appropriate verified parent property, request authorized access or use its supported child-property verification. A Domain property covers broader hosts/protocols and uses DNS verification; any DNS change requires separate explicit authorization. [Google explains the available verification methods and continued token checks](https://support.google.com/webmasters/answer/9008080).
+The proposed origin remains `https://dmplay.kalam.trade`. Confirm it with the owner before release. Prefer a URL-prefix property for `https://dmplay.kalam.trade/` to scope this experiment to its exact HTTPS host. If the owner already has an appropriate verified parent property, request authorized access or use its supported child-property verification. A Domain property covers broader hosts/protocols and uses DNS verification; any DNS change requires separate explicit authorization. [Google explains the available verification methods and continued token checks](https://support.google.com/webmasters/answer/9008080).
 
 For the implemented HTML-tag method:
 
@@ -17,10 +17,10 @@ Do not rely on analytics-based verification: this site's analytics tag is delibe
 
 ## Sitemap and release checks
 
-After the host is authorized and released with `SITE_ENV=production`, explicit `SITE_ORIGIN=https://learn.kalam.trade`, and `SITE_INDEXABLE=true`:
+After the host is authorized and released with `SITE_ENV=production`, explicit `SITE_ORIGIN=https://dmplay.kalam.trade`, and `SITE_INDEXABLE=true`:
 
 1. Verify the live homepage and representative guides/tools return 200, self-canonicalize to HTTPS directory URLs, and have no `noindex` in HTML **or HTTP headers**. Confirm Cloudflare aliases/previews remain excluded, known aliases redirect, and missing pages return actual 404 responses. Local Astro preview does not execute Cloudflare's generated host rules.
-2. Open `https://learn.kalam.trade/sitemap.xml`: expect 14 distinct canonical URLs, correct XML, and no 404, preview, or alias URLs. Confirm `/robots.txt` permits access and advertises this sitemap. Preview/default builds intentionally have an empty sitemap and no advertised sitemap.
+2. Open `https://dmplay.kalam.trade/sitemap.xml`: expect 14 distinct canonical URLs, correct XML, and no 404, preview, or alias URLs. Confirm `/robots.txt` permits access and advertises this sitemap. Preview/default builds intentionally have an empty sitemap and no advertised sitemap.
 3. In the correct Search Console property, open **Sitemaps**, submit the sitemap URL, and record its fetch/processing status. Investigate fetch or XML errors. A successful submission helps discovery; it does not prove every URL is indexed. [Sitemaps report documentation](https://support.google.com/webmasters/answer/7451001).
 4. Inspect the homepage, `/wingo-rules/`, `/patterns-and-randomness/`, `/simulator/`, and `/probability-calculator/` in **URL Inspection**. Run a live test and review rendered content and crawl/indexing eligibility. Request indexing for these representative pages if appropriate. Later compare Google's selected canonical in indexed results with the declared canonical. The live test cannot predict Google's canonical decision. [URL Inspection documentation](https://support.google.com/webmasters/answer/9012289).
 

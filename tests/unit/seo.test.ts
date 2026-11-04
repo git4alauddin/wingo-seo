@@ -5,7 +5,7 @@ import { resolveSiteConfig } from '../../config/site.mjs';
 import { canonicalUrl, serializeSchema, sitemapXml, robotsText, headersText, redirectsText } from '../../config/seo.mjs';
 import { breadcrumbSchema, pageSchema } from '../../src/lib/structured-data';
 
-const origin = 'https://learn.kalam.trade';
+const origin = 'https://dmplay.kalam.trade';
 describe('indexing controls', () => {
   it('defaults to an excluded preview even when the bundler uses production mode', () => {
     expect(resolveSiteConfig({})).toMatchObject({ environment: 'preview', indexable: false });
@@ -30,7 +30,7 @@ describe('indexing controls', () => {
     expect(resolveSiteConfig(env).indexable).toBe(false);
     expect(resolveSiteConfig({ ...env, CF_PAGES_BRANCH: 'main' }).indexable).toBe(true);
   });
-  it.each(['http://learn.kalam.trade', 'https://example.com', origin + '/other', origin + '?q=x', 'https://user:password@learn.kalam.trade'])('rejects unintended origin %s', value => {
+  it.each(['https://learn.kalam.trade', 'http://dmplay.kalam.trade', 'https://example.com', origin + '/other', origin + '?q=x', 'https://user:password@dmplay.kalam.trade'])('rejects unintended origin %s', value => {
     expect(() => resolveSiteConfig({ SITE_ORIGIN: value })).toThrow();
   });
   it('rejects typoed settings rather than silently enabling a release', () => {

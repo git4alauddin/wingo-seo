@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { resolveMeasurementConfig } from '../../config/measurement.mjs';
 import { cleanReferrer, CONSENT_LIFETIME, readChoice, savedChoice, sanitizeSignal, sizeBucket } from '../../src/lib/analytics';
 
-const origin = 'https://learn.kalam.trade';
+const origin = 'https://dmplay.kalam.trade';
 const site = { environment: 'production', origin, cloudflarePreview: false };
 const enabled = { ANALYTICS_ENABLED: 'true', GA4_MEASUREMENT_ID: 'G-TEST123456', ANALYTICS_CONSENT_MODE: 'required' };
 describe('measurement release configuration', () => {

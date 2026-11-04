@@ -6,7 +6,7 @@ An original educational website for learning number classifications, probability
 
 **Phase 6: local QA and deployment preparation implemented; public deployment pending.** The Astro site includes 14 public pages, six guides, working educational tools, technical SEO, configurable analytics, production-candidate builds, Lighthouse diagnostics, and a read-only live release checker.
 
-The tools run locally in the browser. Cloudflare Workers static hosting is now configured following the owner's hosting choice. The first hosted build passed, but its Pages/Workers configuration mismatch prevented deployment; that mismatch is corrected in this revision. Live hosting is not yet verified and analytics remains disabled. Default review builds stay `noindex`.
+The first Workers deployment is live at `https://dmplay.kalam.trade/`, the hostname selected by the owner. Initial public route and tool checks passed. This revision aligns canonical URLs and configuration with that address. Production indexing and GA4 remain disabled. Cloudflare-injected Insights was observed in browser requests and needs owner review/disablement before the initial privacy checks can pass. See the [live review](docs/live-review.md).
 
 The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 6 report](docs/phase-6-report.md), [deployment runbook](docs/deployment.md), and [performance evidence](docs/performance.md) for release preparation and pending owner steps. Earlier reports remain historical records.
 
@@ -74,7 +74,7 @@ npm run test:performance
 
 `test:performance` includes the candidate build itself. These commands write to ignored `artifacts/release/` and `artifacts/lighthouse/`, leave default `dist/` untouched, and upload nothing. The candidate clears analytics and optional owner configuration. Select Chrome with `PLAYWRIGHT_CHANNEL=chrome` as above, or install Playwright Chromium. CI also runs the performance checks. Local scores do not establish field Core Web Vitals; see the [performance guide](docs/performance.md).
 
-After authorized publication, `npm run check:release -- --production https://learn.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample account and preview prefix with real matching hosts. Use an excluded branch Preview, not a Version URL sharing production HTML. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact Workers build/deploy settings and host checks.
+After authorized publication, `npm run check:release -- --production https://dmplay.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample account and preview prefix with real matching hosts. Use an excluded branch Preview, not a Version URL sharing production HTML. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact Workers build/deploy settings and host checks.
 
 ## Using the tools
 
@@ -123,7 +123,7 @@ Use genuine publication/revision dates and original examples. A supplied revisio
 | Variable | Default / behavior |
 | --- | --- |
 | `SITE_ENV` | `preview`; accepts `development`, `preview`, `production` |
-| `SITE_ORIGIN` | Proposed `https://learn.kalam.trade` for preview; explicitly required for a production-labeled build |
+| `SITE_ORIGIN` | Confirmed `https://dmplay.kalam.trade`; explicitly required for a production-labeled build |
 | `SITE_INDEXABLE` | `false`; only literal `true` plus production environment can enable indexing |
 | `ANALYTICS_ENABLED` | `false`; requires a valid ID, required consent mode, and production environment |
 | `GA4_MEASUREMENT_ID` | Empty; public GA4 web stream identifier |
@@ -141,7 +141,7 @@ The original 1200×630 share image is committed as PNG, with its editable SVG so
 
 Contact details and course links remain absent by default. Live GA4 remains disabled, and Search Console has not been verified. When deliberately activated, the consent panel allows rejection and later withdrawal; tool usage works with analytics off. See the [event contract and owner activation checklist](docs/analytics-events.md). There is no contact form, invented email, external outcome feed, database, authentication, or payment integration.
 
-The owner connected Workers Builds and requested Workers hosting. Build command: `npm run build && npm run check:site`; deploy command: `npx wrangler deploy`. Git pushes can trigger hosted builds/publication. Keep the initial build variables set to preview, non-indexable, analytics off; see the [runbook](docs/deployment.md). Domain confirmation, custom-domain release authorization, and live verification remain pending. Never commit credentials or put secrets in public configuration.
+The owner connected Workers Builds and deployed `dmplay.kalam.trade`. Build command: `npm run build && npm run check:site`; deploy command: `npx wrangler deploy`. Git pushes can trigger hosted builds/publication. Set Cloudflare's build variable `SITE_ORIGIN=https://dmplay.kalam.trade` before rebuilding this revision; the earlier hostname is now rejected. Keep preview/non-indexable/analytics-off settings until the canonical and hosting telemetry recheck passes. Full alias/preview verification, Search Console setup, and production indexing activation remain pending. Never commit credentials or put secrets in public configuration.
 
 ## Phase workflow
 

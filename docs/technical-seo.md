@@ -11,7 +11,7 @@ Build configuration comes from process environment variables in `config/site.mjs
 | Default local or preview | `SITE_ENV` absent or `preview`; `SITE_INDEXABLE` defaults to `false` | `noindex, follow`; empty sitemap; robots permits crawling without advertising the sitemap; global preview `X-Robots-Tag` rule |
 | Development | `SITE_ENV=development` | Same exclusion, even if an indexing opt-in was inherited |
 | Production, not released | `SITE_ENV=production`, explicit `SITE_ORIGIN`, opt-in absent or false | Same exclusion |
-| Indexable production | `SITE_ENV=production`, `SITE_ORIGIN=https://learn.kalam.trade`, `SITE_INDEXABLE=true` | Fourteen public canonical URLs in sitemap; robots advertises it; no public-page `noindex`; 404 remains excluded |
+| Indexable production | `SITE_ENV=production`, `SITE_ORIGIN=https://dmplay.kalam.trade`, `SITE_INDEXABLE=true` | Fourteen public canonical URLs in sitemap; robots advertises it; no public-page `noindex`; 404 remains excluded |
 | Cloudflare branch preview | `CF_PAGES=1`, nonempty `CF_PAGES_BRANCH` other than `main` | Exclusion overrides inherited production/indexing flags |
 | Workers branch preview | `WORKERS_CI=1`, `WORKERS_CI_BRANCH` other than `main` or missing | Exclusion overrides inherited production/indexing/analytics flags |
 

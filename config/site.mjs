@@ -8,9 +8,9 @@ export function resolveSiteConfig(env = process.env) {
   if (environment === 'production' && !env.SITE_ORIGIN) {
     throw new Error('Production requires explicit SITE_ORIGIN. Domain authorization is a separate release step.');
   }
-  const origin = new URL(env.SITE_ORIGIN ?? 'https://learn.kalam.trade');
-  if (origin.protocol !== 'https:' || origin.origin !== 'https://learn.kalam.trade' || origin.pathname !== '/' || origin.search || origin.hash || origin.username || origin.password) {
-    throw new Error('SITE_ORIGIN must be https://learn.kalam.trade without a path, query, or credentials.');
+  const origin = new URL(env.SITE_ORIGIN ?? 'https://dmplay.kalam.trade');
+  if (origin.protocol !== 'https:' || origin.origin !== 'https://dmplay.kalam.trade' || origin.pathname !== '/' || origin.search || origin.hash || origin.username || origin.password) {
+    throw new Error('SITE_ORIGIN must be https://dmplay.kalam.trade without a path, query, or credentials.');
   }
   const flag = env.SITE_INDEXABLE ?? 'false';
   if (!['true', 'false'].includes(flag)) throw new Error('SITE_INDEXABLE must be true or false.');

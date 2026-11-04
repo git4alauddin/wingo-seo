@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve, sep, extname } from 'node:path';
 import { CONSENT_KEY, savedChoice } from '../../src/lib/analytics';
 
-const origin = 'https://learn.kalam.trade';
+const origin = 'https://dmplay.kalam.trade';
 const fixtureRoot = resolve('artifacts/seo/analytics-enabled');
 type Call = [string, string | Record<string, unknown>, Record<string, unknown>?];
 declare global { interface Window { __gtagCalls?: Call[] } }

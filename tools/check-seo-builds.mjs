@@ -13,7 +13,7 @@ const profiles = [
 for (const profile of profiles) {
   const output = resolve('artifacts', 'seo', profile.name);
   if (!output.startsWith(workspace + sep)) throw new Error('SEO build output must stay inside the workspace.');
-  const env = { ...process.env, SITE_ORIGIN: 'https://learn.kalam.trade', SITE_CHECK_DIR: output, ANALYTICS_ENABLED: 'false', GA4_MEASUREMENT_ID: '', ANALYTICS_CONSENT_MODE: 'unconfigured', SEARCH_CONSOLE_VERIFICATION_TOKEN: '', CONTACT_EMAIL: '', COURSE_INFO_URL: '' };
+  const env = { ...process.env, SITE_ORIGIN: 'https://dmplay.kalam.trade', SITE_CHECK_DIR: output, ANALYTICS_ENABLED: 'false', GA4_MEASUREMENT_ID: '', ANALYTICS_CONSENT_MODE: 'unconfigured', SEARCH_CONSOLE_VERIFICATION_TOKEN: '', CONTACT_EMAIL: '', COURSE_INFO_URL: '' };
   delete env.CF_PAGES; delete env.CF_PAGES_BRANCH;
   delete env.WORKERS_CI; delete env.WORKERS_CI_BRANCH;
   Object.assign(env, profile.variables);

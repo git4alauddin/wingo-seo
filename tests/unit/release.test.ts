@@ -3,7 +3,7 @@ import { releaseTargets, checkRelease } from '../../tools/release-checks.mjs';
 import { routes } from '../../tools/routes.mjs';
 import { sitemapXml } from '../../config/seo.mjs';
 
-const production = 'https://learn.kalam.trade', alias = 'https://example-project.pages.dev', preview = 'https://qa.example-project.pages.dev';
+const production = 'https://dmplay.kalam.trade', alias = 'https://example-project.pages.dev', preview = 'https://qa.example-project.pages.dev';
 const targets = { production, alias, preview };
 const args = ['--production', production, '--alias', alias, '--preview', preview];
 
