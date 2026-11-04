@@ -310,7 +310,7 @@
     .header-inner { height: 80px; }
     .desktop-nav { gap: 22px; }
     .header-cta { display: none; }
-    .hero { padding-top: 55px; gap: 26px; }
+    .hero { padding-top: 55px; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
     .hero h1 { font-size: 2.9rem; }
     .hero-description { font-size: .93rem; }
     .hero-footnote { align-items: flex-start; }
@@ -324,7 +324,7 @@
     .specimen-tag span { font-size: .58rem; margin-left: 5px; }
     .tag-size { left: -7px; }
     .tag-color { right: -11px; bottom: 30px; }
-    .margin-note { right: -12px; bottom: 85px; padding: 10px; font-size: .65rem; }
+    .margin-note { right: 12px; bottom: 85px; padding: 10px; font-size: .65rem; }
     .margin-note > span { display: none; }
     .lab-chart { padding: 12px; }
     .chart-heading { font-size: .43rem; }
