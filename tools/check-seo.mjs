@@ -112,7 +112,7 @@ export function checkSEO(pages, root, config) {
   const headers = readFileSync(join(root, '_headers'), 'utf8');
   assert.equal(/^\/\*\n\s+X-Robots-Tag: noindex/m.test(headers), !indexable, 'No production-wide noindex header');
   if (indexable) {
-    for (const pattern of ['https://:project.pages.dev/*', 'https://:version.:project.pages.dev/*', '/404.html']) {
+    for (const pattern of ['https://:worker.:account.workers.dev/*', 'https://:project.pages.dev/*', 'https://:version.:project.pages.dev/*', '/404.html']) {
       assert(headers.includes(`${pattern}\n  X-Robots-Tag: noindex`), `Missing host/error exclusion: ${pattern}`);
     }
   }

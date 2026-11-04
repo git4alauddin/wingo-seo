@@ -30,7 +30,7 @@ export function robotsText(config) {
 /** @param {{indexable: boolean}} config */
 export function headersText(config) {
   return config.indexable
-    ? '# Keep host aliases excluded without blocking the custom production domain.\nhttps://:project.pages.dev/*\n  X-Robots-Tag: noindex, follow\n\nhttps://:version.:project.pages.dev/*\n  X-Robots-Tag: noindex, follow\n\n/404.html\n  X-Robots-Tag: noindex, follow\n'
+    ? '# Keep host aliases excluded without blocking the custom production domain.\nhttps://:worker.:account.workers.dev/*\n  X-Robots-Tag: noindex, follow\n\nhttps://:project.pages.dev/*\n  X-Robots-Tag: noindex, follow\n\nhttps://:version.:project.pages.dev/*\n  X-Robots-Tag: noindex, follow\n\n/404.html\n  X-Robots-Tag: noindex, follow\n'
     : '# Nonproduction/unreleased builds must stay out of search.\n/*\n  X-Robots-Tag: noindex, follow\n';
 }
 

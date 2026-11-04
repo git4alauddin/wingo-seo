@@ -13,6 +13,7 @@
     "build:release": "node tools/build-release.mjs",
     "preview": "node tools/astro.mjs preview --host 127.0.0.1",
     "check:site": "node tools/check-site.mjs",
+    "check:worker": "wrangler deploy --dry-run --outdir artifacts/worker",
     "check:release": "node tools/check-release.mjs",
     "assets:social": "node tools/generate-social.mjs",
     "test:seo": "node tools/check-seo-builds.mjs",
@@ -36,6 +37,7 @@
     "lighthouse": "13.5.0",
     "sharp": "0.35.5",
     "typescript": "5.9.3",
-    "vitest": "5.1.0"
+    "vitest": "5.1.0",
+    "wrangler": "4.157.0"
   }
 }

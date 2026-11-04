@@ -11,6 +11,7 @@ jobs:
     timeout-minutes: 15
     env:
       SITE_ENV: preview
+      WRANGLER_SEND_METRICS: 'false'
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.1.0
@@ -20,4 +21,5 @@ jobs:
       - run: npm ci --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run validate
+      - run: npm run check:worker
       - run: npm run test:performance

@@ -16,6 +16,12 @@ describe('indexing controls', () => {
     expect(resolveSiteConfig({ SITE_ENV: 'production', SITE_ORIGIN: origin }).indexable).toBe(false);
     expect(resolveSiteConfig({ SITE_ENV: 'production', SITE_ORIGIN: origin, SITE_INDEXABLE: 'true' }).indexable).toBe(true);
   });
+  it('excludes Workers non-main and unknown branches despite inherited production flags', () => {
+    const env = { SITE_ENV: 'production', SITE_ORIGIN: origin, SITE_INDEXABLE: 'true', WORKERS_CI: '1' };
+    expect(resolveSiteConfig(env).indexable).toBe(false);
+    expect(resolveSiteConfig({ ...env, WORKERS_CI_BRANCH: 'feature/test' }).cloudflarePreview).toBe(true);
+    expect(resolveSiteConfig({ ...env, WORKERS_CI_BRANCH: 'main' }).indexable).toBe(true);
+  });
   it.each(['development', 'preview'])('cannot enable indexing for %s', environment => {
     expect(resolveSiteConfig({ SITE_ENV: environment, SITE_INDEXABLE: 'true' }).indexable).toBe(false);
   });
@@ -62,6 +68,7 @@ describe('canonical pages, sitemap and host rules', () => {
     expect(production).not.toMatch(/^\/\*$/m);
     expect(production).toContain('https://:project.pages.dev/*');
     expect(production).toContain('https://:version.:project.pages.dev/*');
+    expect(production).toContain('https://:worker.:account.workers.dev/*');
     expect(production).toContain('/404.html\n  X-Robots-Tag: noindex');
   });
   it('redirects known aliases only, without wildcard or circular rules', () => {

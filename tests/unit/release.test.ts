@@ -8,6 +8,13 @@ const targets = { production, alias, preview };
 const args = ['--production', production, '--alias', alias, '--preview', preview];
 
 describe('explicit public release targets', () => {
+  it('accepts Workers previews only for the same Worker and account', () => {
+    const workerArgs = ['--production', production, '--alias', 'https://wingo-seo.owner.workers.dev', '--preview', 'https://qa-wingo-seo.owner.workers.dev'];
+    expect(releaseTargets(workerArgs).alias).toBe(workerArgs[3]);
+    for (const host of ['https://qa-other.owner.workers.dev', 'https://qa-wingo-seo.other.workers.dev', 'https://wingo-seo.owner.workers.dev']) {
+      expect(() => releaseTargets([...workerArgs.slice(0, 5), host])).toThrow();
+    }
+  });
   it('accepts only the intended production origin and matching Pages hosts', () => { expect(releaseTargets(args)).toEqual(targets); });
   it.each([
     [], ['--production', production], ['--production', production, '--production', production, '--alias', alias],

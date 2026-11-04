@@ -13,6 +13,7 @@ Build configuration comes from process environment variables in `config/site.mjs
 | Production, not released | `SITE_ENV=production`, explicit `SITE_ORIGIN`, opt-in absent or false | Same exclusion |
 | Indexable production | `SITE_ENV=production`, `SITE_ORIGIN=https://learn.kalam.trade`, `SITE_INDEXABLE=true` | Fourteen public canonical URLs in sitemap; robots advertises it; no public-page `noindex`; 404 remains excluded |
 | Cloudflare branch preview | `CF_PAGES=1`, nonempty `CF_PAGES_BRANCH` other than `main` | Exclusion overrides inherited production/indexing flags |
+| Workers branch preview | `WORKERS_CI=1`, `WORKERS_CI_BRANCH` other than `main` or missing | Exclusion overrides inherited production/indexing/analytics flags |
 
 The origin is restricted to the proposed HTTPS host. Unknown environments and typoed boolean flags fail configuration. A production-labeled build requires an explicit origin. The production branch is currently `main`; update the guard together with hosting configuration if that changes.
 
@@ -33,7 +34,7 @@ The Astro build completion hook writes two files into each output folder:
 - **`_headers`:** excluded profiles receive a global `X-Robots-Tag: noindex, follow` rule. Indexable production instead excludes the stable `:project.pages.dev` alias, nested `:version.:project.pages.dev` aliases, and the direct 404 document. The custom production host is not covered by a global noindex rule.
 - **`_redirects`:** twenty-seven explicit 301 rules normalize `/index.html` and the extension/directory aliases of the thirteen non-home public routes. Targets are actual generated pages. No wildcard fallback redirects missing pages to home.
 
-These are **Cloudflare Pages configuration files**, not runtime behavior installed in Astro's local preview server. Local response tests verify Astro's static delivery and real missing-path 404s; generated-file checks validate the host rules and all targets. Their application on Cloudflare must be verified after authorized deployment. [Cloudflare documents header-file behavior and host patterns](https://developers.cloudflare.com/pages/configuration/headers/).
+These files apply to **Cloudflare Workers static assets** as well as legacy Pages hosting; Astro's local preview does not execute them. Indexable builds also exclude `https://:worker.:account.workers.dev/*`, covering stable, branch, and version hosts. `wrangler.jsonc` serves directory HTML with canonical trailing slashes and real 404 fallback. Local Workers-emulator checks confirm known pages, explicit redirects, missing/nested 404s, and excluded-build headers. Live CDN checks remain necessary. [Workers static header behavior](https://developers.cloudflare.com/workers/static-assets/headers/).
 
 Missing pages retain their 404 response and a `noindex` meta tag. The direct error document also has an exclusion header rule for Cloudflare; error handling does not depend solely on that rule matching an arbitrary missing request path.
 

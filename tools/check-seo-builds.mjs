@@ -6,6 +6,7 @@ const workspace = resolve('.');
 const profiles = [
   { name: 'preview', variables: { SITE_ENV: 'preview', SITE_INDEXABLE: 'false' } },
   { name: 'production', variables: { SITE_ENV: 'production', SITE_INDEXABLE: 'true' } },
+  { name: 'workers-branch-preview', variables: { SITE_ENV: 'production', SITE_INDEXABLE: 'true', WORKERS_CI: '1', WORKERS_CI_BRANCH: 'feature/seo-check', ANALYTICS_ENABLED: 'true', GA4_MEASUREMENT_ID: 'G-TEST123456', ANALYTICS_CONSENT_MODE: 'required' } },
   { name: 'cloudflare-branch-preview', variables: { SITE_ENV: 'production', SITE_INDEXABLE: 'true', CF_PAGES: '1', CF_PAGES_BRANCH: 'feature/seo-check', ANALYTICS_ENABLED: 'true', GA4_MEASUREMENT_ID: 'G-TEST123456', ANALYTICS_CONSENT_MODE: 'required' } },
   { name: 'analytics-enabled', variables: { SITE_ENV: 'production', SITE_INDEXABLE: 'true', ANALYTICS_ENABLED: 'true', GA4_MEASUREMENT_ID: 'G-TEST123456', ANALYTICS_CONSENT_MODE: 'required', SEARCH_CONSOLE_VERIFICATION_TOKEN: 'test-only-verification-token-not-an-owner-token', CONTACT_EMAIL: 'study@example.com', COURSE_INFO_URL: 'https://course.kalam.trade/' } },
 ];
@@ -14,6 +15,7 @@ for (const profile of profiles) {
   if (!output.startsWith(workspace + sep)) throw new Error('SEO build output must stay inside the workspace.');
   const env = { ...process.env, SITE_ORIGIN: 'https://learn.kalam.trade', SITE_CHECK_DIR: output, ANALYTICS_ENABLED: 'false', GA4_MEASUREMENT_ID: '', ANALYTICS_CONSENT_MODE: 'unconfigured', SEARCH_CONSOLE_VERIFICATION_TOKEN: '', CONTACT_EMAIL: '', COURSE_INFO_URL: '' };
   delete env.CF_PAGES; delete env.CF_PAGES_BRANCH;
+  delete env.WORKERS_CI; delete env.WORKERS_CI_BRANCH;
   Object.assign(env, profile.variables);
   mkdirSync(resolve('artifacts', 'seo'), { recursive: true });
   let log = '';

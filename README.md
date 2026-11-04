@@ -6,7 +6,7 @@ An original educational website for learning number classifications, probability
 
 **Phase 6: local QA and deployment preparation implemented; public deployment pending.** The Astro site includes 14 public pages, six guides, working educational tools, technical SEO, configurable analytics, production-candidate builds, Lighthouse diagnostics, and a read-only live release checker.
 
-The tools run locally in the browser. No live deployment or analytics is enabled. Default local/preview builds remain `noindex`; production indexing requires an explicit opt-in. Cloudflare preview/alias protection is generated but still needs live host verification after authorized deployment.
+The tools run locally in the browser. Cloudflare Workers static hosting is now configured following the owner's hosting choice. The first hosted build passed, but its Pages/Workers configuration mismatch prevented deployment; that mismatch is corrected in this revision. Live hosting is not yet verified and analytics remains disabled. Default review builds stay `noindex`.
 
 The [handoff](handoff.txt) is the authoritative specification. See the [documentation index](docs/README.md), [Phase 6 report](docs/phase-6-report.md), [deployment runbook](docs/deployment.md), and [performance evidence](docs/performance.md) for release preparation and pending owner steps. Earlier reports remain historical records.
 
@@ -59,7 +59,7 @@ The suite starts its own temporary server on port **4322**, without reusing an e
 
 Review screenshots, including populated tool states, are saved under `artifacts/screenshots/phase-3/`; failure traces/screenshots go under `test-results/`. Generated artifacts are ignored by Git. Automated accessibility checks supplement visual/keyboard review; they do not establish certification.
 
-`npm test` runs deterministic Vitest checks for the tools, indexing, structured data, measurement gates, event allowlists, consent records, and referrer filtering. `npm run test:seo` builds preview, indexable production, inherited-production Cloudflare branch-preview, and a synthetic analytics-enabled production profile into ignored `artifacts/seo/` folders, then validates their actual output. It leaves default `dist/` untouched. Logs are saved alongside those folders. Run this matrix before running the analytics browser tests directly: they use its synthetic fixture.
+`npm test` runs deterministic Vitest checks for the tools, indexing, structured data, measurement gates, event allowlists, consent records, and referrer filtering. `npm run test:seo` builds five profiles: preview, production, Workers branch-preview, legacy Pages branch-preview, and synthetic analytics-enabled production. It validates actual output under ignored `artifacts/seo/` and leaves default `dist/` untouched. Run this matrix before analytics browser tests: they use its synthetic fixture. After building `dist/`, `npm run check:worker` validates Workers packaging with a dry run and uploads nothing.
 
 Analytics browser checks intercept every request and substitute a local tag stub. They cover consent, refusal, withdrawal, cross-tab changes, privacy signals, event categories, deduplication, and failure modes without contacting Google. Consent screenshots are saved under `artifacts/screenshots/phase-5/`. Real Google SDK behavior and property delivery still require authorized live verification.
 
@@ -74,7 +74,7 @@ npm run test:performance
 
 `test:performance` includes the candidate build itself. These commands write to ignored `artifacts/release/` and `artifacts/lighthouse/`, leave default `dist/` untouched, and upload nothing. The candidate clears analytics and optional owner configuration. Select Chrome with `PLAYWRIGHT_CHANNEL=chrome` as above, or install Playwright Chromium. CI also runs the performance checks. Local scores do not establish field Core Web Vitals; see the [performance guide](docs/performance.md).
 
-After authorized publication, `npm run check:release -- --production https://learn.kalam.trade --alias https://PROJECT.pages.dev --preview https://BRANCH.PROJECT.pages.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample Pages hosts with real matching hosts. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact build/environment settings, authorization, host verification, and rollback.
+After authorized publication, `npm run check:release -- --production https://learn.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample account and preview prefix with real matching hosts. Use an excluded branch Preview, not a Version URL sharing production HTML. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact Workers build/deploy settings and host checks.
 
 ## Using the tools
 
@@ -91,7 +91,7 @@ Sampling uses browser `crypto.getRandomValues` with rejection mapping. If that A
 config/site.mjs             validated build environment and proposed origin
 config/seo.mjs              canonical, sitemap, robots, and host-rule helpers
 config/measurement.mjs      analytics gates and optional public destinations
-wrangler.jsonc             proposed separate Cloudflare Pages project and static output
+wrangler.jsonc             Workers static assets, routing, and preview URLs
 src/components/             navigation, metadata, cards, diagrams, tables
 src/content/guides/         six original Markdown articles
 src/content.config.ts       schema-validated content collection
@@ -141,7 +141,7 @@ The original 1200×630 share image is committed as PNG, with its editable SVG so
 
 Contact details and course links remain absent by default. Live GA4 remains disabled, and Search Console has not been verified. When deliberately activated, the consent panel allows rejection and later withdrawal; tool usage works with analytics off. See the [event contract and owner activation checklist](docs/analytics-events.md). There is no contact form, invented email, external outcome feed, database, authentication, or payment integration.
 
-Cloudflare configuration and the deployment runbook are prepared. Project connection, domain confirmation, authorized publication, and live host verification remain pending. Connecting Pages Git integration can publish automatically on push; review that change in behavior before enabling it. Privileged service connections, DNS changes, and production actions require the handoff's authorization. Never commit credentials or put secrets in public configuration.
+The owner connected Workers Builds and requested Workers hosting. Build command: `npm run build && npm run check:site`; deploy command: `npx wrangler deploy`. Git pushes can trigger hosted builds/publication. Keep the initial build variables set to preview, non-indexable, analytics off; see the [runbook](docs/deployment.md). Domain confirmation, custom-domain release authorization, and live verification remain pending. Never commit credentials or put secrets in public configuration.
 
 ## Phase workflow
 

@@ -14,7 +14,8 @@ export function resolveSiteConfig(env = process.env) {
   }
   const flag = env.SITE_INDEXABLE ?? 'false';
   if (!['true', 'false'].includes(flag)) throw new Error('SITE_INDEXABLE must be true or false.');
-  const cloudflarePreview = env.CF_PAGES === '1' && !!env.CF_PAGES_BRANCH && env.CF_PAGES_BRANCH !== 'main';
+  const cloudflarePreview = (env.CF_PAGES === '1' && !!env.CF_PAGES_BRANCH && env.CF_PAGES_BRANCH !== 'main') ||
+    (env.WORKERS_CI === '1' && env.WORKERS_CI_BRANCH !== 'main');
   return Object.freeze({
     environment, origin: origin.origin, cloudflarePreview,
     indexable: environment === 'production' && flag === 'true' && !cloudflarePreview,

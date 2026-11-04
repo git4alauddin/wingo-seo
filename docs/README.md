@@ -39,7 +39,8 @@ All Phase 1 research is dated 2026-11-03. Statements about search results are ob
 ## Phase 6: QA and deployment preparation
 
 - [Phase report, validation, and pending release gates](phase-6-report.md)
-- [Cloudflare Pages deployment and rollback runbook](deployment.md)
+- [Cloudflare Workers deployment and rollback runbook](deployment.md)
+- [Workers hosting correction and validation](workers-migration.md)
 - [Local performance evidence and live measurement limits](performance.md)
 
 The dated post-deployment monitoring checklist follows in Phase 7. Account setup, deployment, live analytics verification, and Search Console verification have not happened.

@@ -4,7 +4,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { routes } from './routes.mjs';
 
 export function releaseTargets(args) {
-  assert.equal(args.length, 6, 'Usage: npm run check:release -- --production https://learn.kalam.trade --alias https://PROJECT.pages.dev --preview https://BRANCH.PROJECT.pages.dev');
+  assert.equal(args.length, 6, 'Usage: npm run check:release -- --production https://learn.kalam.trade --alias https://WORKER.ACCOUNT.workers.dev --preview https://BRANCH-WORKER.ACCOUNT.workers.dev');
   const values = {};
   for (let i = 0; i < args.length; i += 2) {
     assert(['--production', '--alias', '--preview'].includes(args[i]) && !values[args[i]], 'Supply each release target exactly once.');
@@ -14,8 +14,14 @@ export function releaseTargets(args) {
   }
   assert.equal(values['--production'], 'https://learn.kalam.trade', 'Production target must match the configured project origin.');
   const alias = new URL(values['--alias']), preview = new URL(values['--preview']);
-  assert(/^[a-z0-9][a-z0-9-]*\.pages\.dev$/.test(alias.hostname), 'Alias must be the actual Cloudflare Pages project host.');
-  assert(preview.hostname.endsWith('.' + alias.hostname) && /^[a-z0-9][a-z0-9-]*$/.test(preview.hostname.slice(0, -(alias.hostname.length + 1))), 'Preview must belong to the same Pages project.');
+  if (/^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*\.workers\.dev$/.test(alias.hostname)) {
+    const [worker, account] = alias.hostname.split('.');
+    const [version, previewAccount, ...suffix] = preview.hostname.split('.');
+    assert(version.endsWith('-' + worker) && version !== worker && /^[a-z0-9][a-z0-9-]*$/.test(version) && previewAccount === account && suffix.join('.') === 'workers.dev', 'Preview must belong to the same Worker and account.');
+  } else {
+    assert(/^[a-z0-9][a-z0-9-]*\.pages\.dev$/.test(alias.hostname), 'Alias must be a Cloudflare Workers or legacy Pages host.');
+    assert(preview.hostname.endsWith('.' + alias.hostname) && /^[a-z0-9][a-z0-9-]*$/.test(preview.hostname.slice(0, -(alias.hostname.length + 1))), 'Preview must belong to the same Pages project.');
+  }
   return { production: values['--production'], alias: alias.origin, preview: preview.origin };
 }
 

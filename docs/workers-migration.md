@@ -1,0 +1,11 @@
+# Workers hosting correction
+
+4 November 2026. The owner chose Workers after the dashboard did not expose the Pages workflow. Earlier phase reports describe the original Pages plan; the current [deployment guide](deployment.md) supersedes it.
+
+The supplied Cloudflare log shows a successful Astro build and site validation followed by a failed `wrangler deploy`: the config contained `pages_build_output_dir`, rather than Workers assets. This revision configures static assets from `dist/`, automatic directory trailing slashes, and real custom 404 handling. No server-side Astro adapter or application Worker script is needed. Wrangler 4.157.0 is pinned, and CI now checks a dry-run package.
+
+Production header generation excludes `:worker.:account.workers.dev`, covering stable and prefixed preview/version hosts. Workers Builds non-main branches, including missing branch information, cannot inherit indexable/analytics-enabled production settings. The build matrix tests this independently. The live release checker accepts matching Workers host/account pairs while retaining legacy Pages support. A production Version URL shares its version's HTML; use a separately built, excluded branch Preview for the checker's preview assertions.
+
+Validation: 73 source files checked without errors/warnings/hints; 148 unit tests and 93 browser tests passed; all five generated-output profiles passed. Wrangler dry-run read 44 asset files and exited successfully without upload. Eight manual requests to the local Workers emulator confirmed known pages, root and nested missing-path 404s, three explicit 301 aliases, and preview noindex response headers. The temporary emulator was stopped afterward. Installing the pinned Wrangler dependency reported zero npm vulnerabilities. These are local checks, not live CDN verification.
+
+Workers Builds is already connected by the owner, so pushing can trigger an actual hosted deployment. Use build command `npm run build && npm run check:site` and deploy command `npx wrangler deploy`. Keep build variables `SITE_ENV=preview`, `SITE_INDEXABLE=false`, and `ANALYTICS_ENABLED=false` for the first `workers.dev` review. Domain attachment and production indexing still require confirmation and the release steps in the guide. This revision performs no direct upload, account change, or DNS action.

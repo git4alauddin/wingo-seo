@@ -1,5 +1,7 @@
 # Phase 6 report: local QA and deployment preparation
 
+Later hosting update: the owner selected Workers. See the [Workers migration record](workers-migration.md) and current [deployment runbook](deployment.md); Pages-specific statements below record the earlier phase implementation.
+
 Date: 2026-11-04. **Local implementation and QA are complete; authorized deployment and live verification remain pending.** No Cloudflare account/project, DNS record, production website, Google property, advertising, or billing setting was changed.
 
 ## Delivered
