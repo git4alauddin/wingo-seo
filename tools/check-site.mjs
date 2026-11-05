@@ -24,7 +24,7 @@ for (const [route, $] of pages) {
   assert.equal($('html').attr('lang'), 'en', `${route}: missing language`);
   assert.equal($('main').length, 1, `${route}: main landmark`);
   assert.equal($('h1').length, 1, `${route}: exactly one H1 required`);
-  const title = $('title').text().trim();
+  const title = $('head > title').text().trim();
   const description = $('meta[name="description"]').attr('content');
   assert(title && !titles.has(title), `${route}: missing/duplicate title`);
   assert(description && !descriptions.has(description), `${route}: missing/duplicate description`);

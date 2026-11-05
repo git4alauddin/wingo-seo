@@ -1,10 +1,11 @@
 ---
+import GameBall from './GameBall.astro';
 const heights = [55, 79, 48, 67, 61, 87, 44, 65, 74, 52];
 ---
 <div class="hero-lab" role="img" aria-label="Illustrative notebook showing how number 5 belongs to Big, Green, and Violet. Uneven bars are decorative and are not measured results.">
   <div class="lab-topline"><span><span class="tiny-square"></span> THE OBSERVATION DESK</span><span>FIG. 01</span></div>
   <div class="specimen-label">One outcome. More than one way to read it.</div>
-  <div class="specimen-view"><div class="specimen-orbit" aria-hidden="true"></div><span class="specimen-five" aria-hidden="true">5</span><div class="specimen-tag tag-size">Big <span>5–9</span></div><div class="specimen-tag tag-color">Green <span>+ Violet</span></div><span class="cross cross-left" aria-hidden="true">+</span><span class="cross cross-right" aria-hidden="true">+</span></div>
+  <div class="specimen-view"><div class="specimen-orbit" aria-hidden="true"></div><GameBall digit={5} class="specimen-five" /><div class="specimen-tag tag-size">Big <span>5–9</span></div><div class="specimen-tag tag-color">Green <span>+ Violet</span></div><span class="cross cross-left" aria-hidden="true">+</span><span class="cross cross-right" aria-hidden="true">+</span></div>
   <div class="lab-chart" aria-hidden="true"><div class="chart-heading"><span>A SAMPLE CAN LOOK UNEVEN</span><span>0 — 9</span></div><div class="mini-bars">{heights.map((height, index) => <div><i style={`--bar-height:${height}%`} class:list={{ highlighted: index === 5 }}></i><span>{index}</span></div>)}</div></div>
   <p class="lab-caption">Illustration only. Not a live result or measured distribution.</p>
   <div class="margin-note"><span aria-hidden="true">↳</span> Observe first.<br /><em>Then ask why.</em></div>

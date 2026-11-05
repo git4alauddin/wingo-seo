@@ -1,11 +1,12 @@
 ---
 import { navigation, guideSlugs } from '../data/site';
+import Brand from './Brand.astro';
 const pathname = Astro.url.pathname;
 const active = (href: string) => pathname === href || (href === '/guides/' && guideSlugs.some(slug => pathname === `/${slug}/`));
 ---
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label="WinGo Learning Lab home"><span class="brand-mark" aria-hidden="true">ll<span></span></span><span>wingo<span class="brand-sub">learning lab</span></span></a>
+    <Brand />
     <nav class="desktop-nav" aria-label="Main navigation">
       {navigation.map(item => <a href={item.href} aria-current={active(item.href) ? 'page' : undefined}>{item.label}</a>)}
     </nav>

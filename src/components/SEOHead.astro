@@ -13,7 +13,7 @@ const imageAlt = 'WinGo Learning Lab: the ten digits, their size groups, and ove
 ---
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#302b7c" />
+<meta name="theme-color" content="#ff6549" />
 {measurementConfig.verificationToken && <meta name="google-site-verification" content={measurementConfig.verificationToken} />}
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
@@ -38,4 +38,4 @@ const imageAlt = 'WinGo Learning Lab: the ten digits, their size groups, and ove
 {article && <meta property="article:published_time" content={article.published.toISOString()} />}
 {article?.modified && <meta property="article:modified_time" content={article.modified.toISOString()} />}
 {!noindex && <script type="application/ld+json" is:inline set:html={serializeSchema(pageSchema(path, pageTitle, description, article))} />}
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/images/dmplay-logo.png" />

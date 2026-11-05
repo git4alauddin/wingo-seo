@@ -1,6 +1,7 @@
 import { classify } from '../lib/model';
 import { formatProbability } from '../lib/probability';
 import { statistics } from '../lib/statistics';
+import { gameBall, gameTrend } from '../lib/game-presentation';
 
 export function required<T extends Element = HTMLElement>(root: ParentNode, selector: string): T {
   const element = root.querySelector<T>(selector);
@@ -28,13 +29,16 @@ export function renderStatistics(root: HTMLElement, digits: readonly number[]) {
   if (!total) { const li = document.createElement('li'); li.textContent = 'No local outcomes yet.'; list.append(li); }
   stats.recent.forEach((digit, i) => {
     const result = classify(digit), li = document.createElement('li');
-    const number = document.createElement('span'); number.className = `digit ${result.colors[0].toLowerCase()}${result.colors.length === 2 ? ' dual' : ''}`; number.textContent = String(digit); number.setAttribute('aria-hidden', 'true');
+    const number = gameBall(digit);
     const label = document.createElement('span'); label.textContent = `Draw ${integer(total - i)}: ${digit} · ${result.size} · ${result.colors.join(' + ')}`;
     li.append(number, label); list.append(li);
   });
   const last = digits.at(-1), outcome = last === undefined ? null : classify(last);
   const latest = required<HTMLElement>(root, '[data-latest]');
-  latest.textContent = outcome ? String(outcome.digit) : '—';
+  latest.replaceChildren(outcome ? document.createElement('b') : document.createTextNode('—'));
+  if (outcome) latest.firstChild!.textContent = String(outcome.digit);
   latest.className = outcome ? `digit ${outcome.colors[0].toLowerCase()}${outcome.colors.length === 2 ? ' dual' : ''}` : 'digit';
+  const trend = required<HTMLElement>(root, '[data-game-trend]');
+  trend.innerHTML = gameTrend(digits); trend.hidden = !total;
   text(root, '[data-latest-label]', outcome ? `${outcome.digit} · ${outcome.size} · ${outcome.colors.join(' + ')}` : 'Start when you’re ready.');
 }

@@ -1,0 +1,55 @@
+/* DmPlay Studio visual components, sourced from wingo-aff/css/balls.css and
+   studio-dmplay.css. Assets are copied locally; educational calculations stay separate. */
+:root { --game-coral:#ff563f; --game-red:#ff535c; --game-green:#14b866; --game-violet:#b353ff; --game-ink:#00264d; --game-paper:#fff7f4; }
+.digit { position:relative; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; border:0; border-radius:50%; background:transparent url('/images/game/ball-red.svg') center/100% 100% no-repeat; color:var(--game-red); font:700 27px/1 Arial,Helvetica,sans-serif; isolation:isolate; }
+.digit::before { content:none; }
+.digit.green { background-image:url('/images/game/ball-green.svg'); }
+.digit.dual { border:0; background-image:url('/images/game/ball-red-violet.svg'); }
+.digit.green.dual { background-image:url('/images/game/ball-green-violet.svg'); }
+.digit b { display:block; font:inherit; text-shadow:none; background:linear-gradient(#ff8a8d,#ff494f 65%,#e93642); background-clip:text; color:transparent; }
+.digit.green b { background-image:linear-gradient(#8bdfb0,#3abb7d 65%,#24975f); }
+.digit.dual b { background-image:linear-gradient(135deg,#ff5860 30%,#e853bc 50%,#a53cf0 68%); }
+.digit.green.dual b { background-image:linear-gradient(135deg,#44c789 30%,#44c789 43%,#bc4aee 56%,#a53cf0 75%); }
+.digit:not(.red):not(.green) { background:#f5f5f5; color:var(--muted); }
+.digit.digit-small { width:32px; height:32px; font-size:17px; }
+.number-grid { background:#f5f5f5; padding:14px 6px; border-radius:11px; gap:16px 4px; }
+.number-grid .digit { width:56px; height:56px; max-width:100%; font-size:27px; }
+.number-label { color:var(--game-ink); }
+.experiment-result>.digit { font-size:43px; }
+.tool-result>.digit { font-size:54px; }
+.specimen-five.digit { width:118px; height:118px; font-size:60px; transform:none; box-shadow:none; }
+.recent-outcomes .digit { width:27px; height:27px; font-size:15px; }
+.recent-outcomes { grid-template-columns:1fr; gap:0; border-radius:6px; overflow:hidden; background:white; border:1px solid #f0e6e2; }
+.recent-outcomes li { min-height:54px; padding:9px 12px; border-bottom:1px solid #eee; color:var(--game-ink); }
+.recent-outcomes li:last-child { border-bottom:0; }
+.color-tag,.size-tag { display:inline-flex; align-items:center; justify-content:center; padding:4px 9px; border-radius:5px; font:12px/1.5 Arial,Helvetica,sans-serif; color:var(--game-ink); white-space:nowrap; }
+.color-tag.green { background:var(--game-green); color:var(--game-ink); border-radius:0 8px 0 8px; }
+.color-tag.red { background:var(--game-red); color:var(--game-ink); border-radius:8px 0 8px 0; }
+.color-tag.violet { background:var(--game-violet); color:#101b2b; }
+.size-tag.big { background:#f7a12c; border-radius:20px 0 0 20px; }
+.size-tag.small { background:#6ca4ef; border-radius:0 20px 20px 0; }
+.game-table table { background:white; color:var(--game-ink); border-radius:6px; overflow:hidden; font-family:Arial,Helvetica,sans-serif; }
+.game-table thead { background:var(--game-coral); color:var(--game-ink); }
+.game-table th,.game-table td { padding:8px 10px; border-bottom:1px solid #f0e6e2; }
+.game-table thead th { height:44px; font-size:13px; font-weight:700; background:var(--game-coral); }
+.game-table tbody tr { height:54px; }
+.game-trend { margin-top:20px; min-width:0; }
+.game-trend figcaption { margin-bottom:10px; color:var(--muted); font-size:.73rem; }
+.game-trend>div { overflow-x:auto; max-width:100%; }
+.game-trend svg { display:block; width:100%; min-width:340px; height:auto; background:white; border:1px solid #f0e6e2; border-radius:6px; overflow:hidden; }
+.tool-panel,.experiment-preview,.classification-sheet,.sample-comparison { border-color:#f0e6e2; border-radius:10px; background:#fff; }
+.tool-panel { background:var(--game-paper); }
+.experiment-preview { min-width:0; }
+.frequency-track { background:#f5f5f5; border-radius:5px; }
+.frequency-track>span { background:linear-gradient(110deg,#ff563f,#ff8969); }
+.sample-bar { border-radius:24px; background:#f7a12c; }
+.sample-bar>span { background:#6ca4ef; }
+.preset-row button { background:#f4f4f4; color:var(--game-ink); border-color:#f0e6e2; border-radius:5px; }
+.preset-row button:hover { border-color:var(--game-coral); }
+@media(max-width:600px) {
+  .number-grid .digit { width:40px; height:40px; font-size:22px; }
+  .experiment-result>.digit { font-size:36px; }
+  .tool-result>.digit { font-size:36px; }
+  .game-table th,.game-table td { padding:7px; }
+  .game-table .color-tag { padding:3px 6px; font-size:11px; }
+}

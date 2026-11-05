@@ -29,6 +29,10 @@ test('batch counts, recent history, replay, and CSV use the completed dataset', 
   await expect(page.locator('[data-digit-count="0"]')).toHaveText('20');
   await expect(page.locator('[data-group-count="Violet"]')).toHaveText('40');
   await expect(page.locator('[data-latest-label]')).toHaveText('9 · Big · Green');
+  await expect(page.locator('[data-game-trend] svg')).toBeVisible();
+  await expect(page.locator('[data-game-trend] g title')).toHaveCount(10);
+  await expect(page.locator('[data-game-trend] g title').first()).toHaveText('Draw 200: 9, Big, Green');
+  await expect(page.locator('[data-game-trend] g title').last()).toHaveText('Draw 191: 0, Small, Red and Violet');
   await page.screenshot({ path: `artifacts/screenshots/phase-3/${testInfo.project.name}-simulator-complete.png`, fullPage: true, scale: 'css' });
   const original = await page.locator('[data-recent]').textContent();
   await page.getByRole('button', { name: 'Replay recorded run' }).click();

@@ -83,6 +83,44 @@ test('content and mobile navigation remain useful without JavaScript', async ({ 
   await context.close();
 });
 
+test('homepage referral is disclosed, user-initiated, and isolated from local tools', async ({ page }) => {
+  const external: string[] = [];
+  await page.route('**/*', route => {
+    if (new URL(route.request().url()).hostname !== '127.0.0.1') { external.push(route.request().url()); return route.abort(); }
+    return route.continue();
+  });
+  await page.goto('/');
+  const card = page.getByRole('region', { name: 'Observe the concepts in practice.' });
+  await expect(card).toContainText('Referral link');
+  await expect(card).toContainText('Demo-only access has not been verified.');
+  const link = card.getByRole('link', { name: 'Explore external game' });
+  await expect(link).toHaveAttribute('href', 'https://www.dmplay20.com/#/register?invitationCode=96875106250');
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'sponsored nofollow noopener noreferrer');
+  await expect(link).toHaveAttribute('referrerpolicy', 'no-referrer');
+  await link.scrollIntoViewIfNeeded(); await link.focus();
+  await expect(link).toBeFocused();
+  expect(external).toEqual([]);
+  await page.getByRole('link', { name: 'Explore the Simulator', exact: true }).first().click();
+  await expect(page).toHaveURL(/\/simulator\/$/);
+  await expect(page.getByRole('button', { name: 'Start experiment', exact: true })).toBeVisible();
+});
+
+test('the homepage referral hook is visible without scrolling on desktop and short phones', async ({ page }, testInfo) => {
+  await mkdir('artifacts/screenshots/homepage-hook', { recursive: true });
+  for (const [width,height] of [[1440,900],[393,852],[360,640],[320,568]]) {
+    await page.setViewportSize({width,height}); await page.goto('/');
+    const link = page.getByRole('link', { name: 'Explore external game' });
+    const visible = await link.evaluate(element => {
+      const r=element.getBoundingClientRect();
+      return r.top>=0 && r.bottom<=innerHeight && r.left>=0 && r.right<=innerWidth;
+    });
+    expect(visible, `${width}x${height} primary referral action is above the fold`).toBe(true);
+    await page.screenshot({path:`artifacts/screenshots/homepage-hook/${testInfo.project.name}-${width}.png`});
+    await page.locator('.external-game').screenshot({path:`artifacts/screenshots/homepage-hook/${testInfo.project.name}-card-${width}.png`});
+  }
+});
+
 test('missing pages return a real 404 and a useful recovery link', async ({ page }) => {
   const response = await page.goto('/a-page-that-does-not-exist/');
   expect(response?.status()).toBe(404);

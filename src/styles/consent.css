@@ -1,12 +1,12 @@
 .consent-panel[hidden], [data-analytics-settings][hidden] { display: none !important; }
-.consent-panel { position: fixed; z-index: 15; inset: auto 24px 24px; max-width: 820px; margin-inline: auto; padding: 24px; background: var(--white); color: var(--ink); border: 1px solid #b8afd1; border-radius: 9px; box-shadow: 0 8px 35px #27263824; }
+.consent-panel { position: fixed; z-index: 15; inset: auto 24px 24px; max-width: 820px; margin-inline: auto; padding: 24px; background: var(--white); color: var(--ink); border: 1px solid #d7ad97; border-radius: 9px; box-shadow: 0 8px 35px #30262424; }
 .consent-panel h2 { font-size: 1.3rem; letter-spacing: -.025em; }
 .consent-panel > p { font-size: .82rem; margin-top: 12px; }
 .consent-panel .consent-detail { font-size: .72rem; color: var(--muted); }
 .consent-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-.consent-actions button { padding: 10px 14px; background: var(--indigo-soft); color: var(--indigo); border: 1px solid #9a8cba; border-radius: 4px; font-size: .78rem; cursor: pointer; }
+.consent-actions button { padding: 10px 14px; background: var(--brand-soft); color: var(--brand); border: 1px solid #bb7c5e; border-radius: 4px; font-size: .78rem; cursor: pointer; }
 .consent-actions button:disabled { opacity: .6; cursor: not-allowed; }
-.consent-actions a { font-size: .73rem; color: var(--indigo); }
+.consent-actions a { font-size: .73rem; color: var(--brand); }
 .consent-panel [data-consent-status]:empty { display: none; }
 [data-analytics-settings] { border: 0; padding: 0; background: transparent; color: var(--muted); font: inherit; font-size: .75rem; text-align: left; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
 @media (max-width: 600px) { .consent-panel { inset-inline: 12px; bottom: 12px; padding: 18px; max-height: calc(100dvh - 24px); overflow-y: auto; } }

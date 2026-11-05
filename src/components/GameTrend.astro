@@ -1,0 +1,6 @@
+---
+import { gameTrend } from '../lib/game-presentation';
+interface Props { digits: number[]; caption: string }
+const { digits, caption } = Astro.props;
+---
+<figure class="game-trend"><figcaption>{caption}</figcaption><div tabindex="0" role="region" aria-label="Draw trend chart; scroll horizontally on smaller screens" set:html={gameTrend(digits)} /></figure>

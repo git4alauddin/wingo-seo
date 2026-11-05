@@ -8,6 +8,6 @@ const samples = [
 ---
 <figure class:list={['sample-comparison', { compact }]}>
   <div class="figure-topline"><span class="eyebrow">A question of sample size</span><span class="pill">Illustrative data</span></div>
-  <div class="sample-cards">{samples.map(sample => <div class="sample-card"><div class="sample-heading"><strong>{sample.size.toLocaleString('en-US')}</strong><span>draws</span></div><div class="sample-bar" aria-hidden="true"><span style={`width:${sample.percentage}%`}></span></div><dl class="sample-values"><div><dt>Small</dt><dd>{sample.small.toLocaleString('en-US')} <span>({sample.percentage}%)</span></dd></div><div><dt>Big</dt><dd>{sample.big.toLocaleString('en-US')} <span>({100 - sample.percentage}%)</span></dd></div></dl></div>)}</div>
+  <div class="sample-cards">{samples.map(sample => <div class="sample-card"><div class="sample-heading"><strong>{sample.size.toLocaleString('en-US')}</strong><span>draws</span></div><div class="sample-bar" aria-hidden="true"><span style={`width:${sample.percentage}%`}></span></div><dl class="sample-values"><div><dt><span class="size-tag small">Small</span></dt><dd>{sample.small.toLocaleString('en-US')} <span>({sample.percentage}%)</span></dd></div><div><dt><span class="size-tag big">Big</span></dt><dd>{sample.big.toLocaleString('en-US')} <span>({100 - sample.percentage}%)</span></dd></div></dl></div>)}</div>
   <figcaption>Constructed examples under a 50/50 model. Larger samples often have smaller relative gaps, but every new sample can vary.</figcaption>
 </figure>

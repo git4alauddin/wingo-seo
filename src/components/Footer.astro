@@ -1,10 +1,11 @@
 ---
 import { site } from '../data/site';
+import Brand from './Brand.astro';
 import { measurementConfig } from '../../config/measurement.mjs';
 ---
 <footer class="site-footer">
   <div class="container footer-top">
-    <div><a class="brand footer-brand" href="/"><span class="brand-mark" aria-hidden="true">ll<span></span></span><span>wingo<span class="brand-sub">learning lab</span></span></a><p>A little curiosity.<br />A clearer understanding of chance.</p></div>
+    <div><Brand footer /><p>A little curiosity.<br />A clearer understanding of chance.</p></div>
     <nav aria-label="Learning resources"><span class="footer-label">Explore</span><a href="/guides/">All guides</a><a href="/simulator/">Simulator</a><a href="/probability-calculator/">Calculator</a>{measurementConfig.courseUrl && <a href={measurementConfig.courseUrl} data-track-course>Educational course information ↗</a>}</nav>
     <nav aria-label="Project information"><span class="footer-label">The project</span><a href="/about/">About the lab</a><a href="/contact/">Contact information</a><a href="/privacy-policy/">Privacy</a><a href="/terms/">Terms</a></nav>
     <div class="footer-note"><span class="footer-label">Keep the distinction clear</span><p>Educational models. Synthetic examples. No live results, financial transactions, or prediction service.</p></div>

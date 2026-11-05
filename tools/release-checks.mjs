@@ -46,7 +46,7 @@ export async function checkRelease(targets, request = fetch) {
     assert(!excluded(response), 'Production HTTP headers exclude indexing.');
     const html = await response.text(), $ = load(html); pageHTML.set(route, html);
     assert.equal($('h1').length, 1, 'Expected exactly one primary heading.');
-    assert($('title').text() && $('meta[name="description"]').attr('content'), 'Missing page metadata.');
+    assert($('head > title').text() && $('meta[name="description"]').attr('content'), 'Missing page metadata.');
     assert.equal($('link[rel="canonical"]').attr('href'), targets.production + route, 'Canonical mismatch.');
     assert(!/noindex|none/i.test($('meta[name="robots"]').attr('content') ?? ''), 'Production HTML excludes indexing.');
     assert.equal($('script[src^="http"], iframe').length, 0, 'Unexpected embedded service.');

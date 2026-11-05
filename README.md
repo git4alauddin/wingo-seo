@@ -76,7 +76,15 @@ npm run test:performance
 
 After authorized publication, `npm run check:release -- --production https://dmplay.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample account and preview prefix with real matching hosts. Use an excluded branch Preview, not a Version URL sharing production HTML. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact Workers build/deploy settings and host checks.
 
+## Homepage external referral
+
+The shared design follows the supplied DmPlay logo: warm ivory surfaces, charcoal feature panels, and coral accents. Brand tokens in `src/styles/global.css` also style tool controls and consent UI. Semantic result colors (Green, Red, Violet) keep their existing meanings. Header, footer, CTA, favicon, and the regenerated social image use the supplied logo; the CTA animation retains its 1.92-second cycle and reduced-motion behavior.
+
+The owner-requested homepage hero card links to DmPlay registration with referral code `96875106250`. It is the first visual block on phones and sits beside the opening headline on desktop, with its main action visible without scrolling. Its destination lives in `src/components/ExternalGameCard.astro`. It is labeled as an external referral, opens only on a manual click in a new tab, and uses `sponsored nofollow noopener noreferrer` plus a no-referrer policy. It adds no embed, external assets, tracking event, or automatic redirect. Demo-only access and the external platform's fairness have not been verified. The card does not claim that guesses or historical patterns predict future results. This owner-approved link updates the original handoff's prohibition on outbound operator referrals; the educational tools remain local and unchanged.
+
 ## Using the tools
+
+Game visuals use the DmPlay Studio from `wingo-aff` as their reference. The four original ball SVGs are copied unchanged into `public/images/game/`; `GameBall.astro` and `src/lib/game-presentation.ts` share number/color presentation for static and generated outcomes. `src/styles/game.css` carries the Studio's ball gradients, coral/white tables, Big/Small shapes, and game palettes. Trend charts use the Studio's numbered-circle grid and connecting line, with local draw indices instead of external period IDs. The homepage chart is explicitly illustrative; simulator charts show only the current local dataset. Probability, sampling, replay, and export logic remain independent of the Studio.
 
 - **Simulator:** choose a batch of 1–10,000 draws or 1–100 five-second teaching rounds. Pause/resume timed runs, cancel pending work, and inspect full-run frequencies alongside at most 20 recent outcomes. Timed progression pauses while the page is hidden.
 - **Replay/export:** restore the last completed dataset without drawing again, or download it as CSV. A cancelled partial run does not replace that dataset. Reset clears the visible run and saved replay data; reload clears in-memory run history.
@@ -153,4 +161,4 @@ The owner connected Workers Builds and deployed `dmplay.kalam.trade`. Build comm
 6. Local QA and deployment preparation — implemented; authorized public release and live checks pending.
 7. Post-deployment baseline and monitoring over the first 30 days.
 
-Each phase ends with validation, a brief learning recap, and a commit/push. Google Ads, certification applications, billing, and spend are separate future work. The site does not offer real-money gambling, operator referrals, or predictions of external results.
+Each phase ends with validation, a brief learning recap, and a commit/push. Google Ads, certification applications, billing, and spend are separate future work. The site's tools do not offer real-money gambling or predictions of external results. The optional homepage referral is documented above.

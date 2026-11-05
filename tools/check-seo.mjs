@@ -22,7 +22,7 @@ export function checkSEO(pages, root, config) {
     if (!is404) assert.equal($('link[rel="canonical"]').attr('href'), canonical, `${route}: canonical must be the clean production URL`);
     const robots = $('meta[name="robots"]').attr('content') ?? '';
     assert.equal(/\bnoindex\b/i.test(robots), !indexable || is404, `${route}: wrong indexing eligibility`);
-    assert.equal($('meta[property="og:title"]').attr('content'), $('title').text());
+    assert.equal($('meta[property="og:title"]').attr('content'), $('head > title').text());
     assert.equal($('meta[property="og:description"]').attr('content'), $('meta[name="description"]').attr('content'));
     assert.equal($('meta[property="og:url"]').attr('content'), is404 ? undefined : canonical);
     assert.equal($('meta[property="og:image"]').attr('content'), imageUrl);
@@ -52,7 +52,7 @@ export function checkSEO(pages, root, config) {
     assert(normalize(pages.get('/about/')('main').text()).includes(publisher.name), 'Publisher must be described visibly');
     assert(normalize($('footer').text()).includes(publisher.alternateName), 'Visible site identity must match its schema');
     assert.equal(website.url, `${origin}/`); assert.equal(website.publisher['@id'], publisher['@id']);
-    assert.equal(page.url, canonical); assert.equal(page.name, $('title').text());
+    assert.equal(page.url, canonical); assert.equal(page.name, $('head > title').text());
     assert.equal(page.description, $('meta[name="description"]').attr('content'));
     assert.equal(page.isPartOf['@id'], website['@id']);
     assert.equal(page.primaryImageOfPage.url, imageUrl);

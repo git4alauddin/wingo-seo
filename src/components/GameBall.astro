@@ -1,0 +1,7 @@
+---
+import { classify } from '../lib/model';
+interface Props { digit: number; class?: string }
+const { digit, class: className } = Astro.props;
+const result = classify(digit);
+---
+<span class:list={['digit', result.colors[0].toLowerCase(), { dual:result.colors.length > 1 }, className]} aria-hidden="true"><b>{digit}</b></span>
