@@ -71,6 +71,7 @@
   .hero-actions .button { padding-inline: 18px; gap: 15px; font-size: .8rem; }
   .hero-footnote { display: flex; align-items: center; gap: 8px; font-size: .68rem; color: var(--muted); margin-top: 20px; }
   .hero-footnote svg { flex-shrink: 0; color: var(--green); }
+  .hero-guide-link { margin-top:14px; font-size:.78rem; }
   .hero-lab { position: relative; background: #fff0e8; border: 1px solid #ecd2c5; border-radius: 12px; padding: 24px 27px 18px; color: var(--brand); transform: rotate(1.5deg); margin-right: 13px; box-shadow: 0 14px 32px #b63b2708; }
   .lab-topline, .figure-topline, .sheet-heading { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
   .lab-topline { border-bottom: 1px solid #e7cbbf; padding-bottom: 15px; font-size: .56rem; font-weight: 650; letter-spacing: .09em; }
@@ -219,6 +220,9 @@
   .prose h2 { font-size: 1.9rem; margin-top: 45px; margin-bottom: 17px; }
   .prose h3 { font-size: 1.3rem; margin-top: 30px; }
   .prose a { color: var(--brand); }
+  .reference-figure { padding:20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--white); }
+  .reference-figure img { height:auto; margin-inline:auto; border-radius:6px; }
+  .reference-figure figcaption { margin-top:14px; color:var(--muted); font-size:.78rem; line-height:1.65; }
   .prose ul, .prose ol { padding-left: 24px; }
   .prose li { padding-left: 4px; margin-block: 8px; }
   .prose strong { font-weight: 650; }

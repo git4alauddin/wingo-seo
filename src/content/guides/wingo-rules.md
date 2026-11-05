@@ -9,6 +9,7 @@ takeaway: "Small is 0-4 and Big is 5-9. In this example ruleset, 0 is Red + Viol
 order: 2
 minutes: 5
 pubDate: 2026-11-03
+updatedDate: 2026-11-06
 publisher: project
 related: [big-small-explained, number-probability]
 cta: simulator
@@ -21,6 +22,8 @@ sources:
 ## Start with the selected ruleset
 
 This guide documents the example rules used throughout WinGo Learning Lab. They describe how digits are classified. They are not a universal rulebook for every product using the name WinGo.
+
+For a screenshot-based application of these labels, read the independent [DmPlay WinGo guide to numbers, colors and the history chart](/dmplay-wingo-guide/).
 
 The outcome is a digit from 0 to 9. Each outcome has exactly one size label and one or two color memberships. Monetary choices, fees, and payouts are outside this educational model.
 

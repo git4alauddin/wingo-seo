@@ -89,7 +89,7 @@ export function checkSEO(pages, root, config) {
     });
     edges.set(route, outgoing);
   }
-  assert.equal(articles, 6, 'Expected six substantive guide articles'); assert.equal(trails, 13, 'Breadcrumbs on every non-home public page');
+  assert.equal(articles, 7, 'Expected seven substantive guide articles'); assert.equal(trails, publicRoutes.length - 1, 'Breadcrumbs on every non-home public page');
   const visited = new Set(), queue = ['/'];
   while (queue.length) { const route = queue.shift(); if (visited.has(route)) continue; visited.add(route); queue.push(...(edges.get(route) ?? [])); }
   assert.deepEqual([...visited].sort(), publicRoutes.sort(), 'Every public page must be reachable through ordinary links');

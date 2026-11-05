@@ -3,4 +3,5 @@ export const routes = [
   '/number-probability/', '/patterns-and-randomness/', '/historical-analysis/',
   '/simulator/', '/probability-calculator/', '/guides/', '/about/',
   '/contact/', '/privacy-policy/', '/terms/',
+  '/dmplay-wingo-guide/',
 ];

@@ -6,7 +6,7 @@ import { pageSchema, type ArticleMetadata } from '../lib/structured-data';
 import { measurementConfig } from '../../config/measurement.mjs';
 interface Props { title: string; description: string; path?: string; type?: 'website' | 'article'; noindex?: boolean; article?: ArticleMetadata }
 const { title, description, path = Astro.url.pathname, type = 'website', noindex = false, article } = Astro.props;
-const pageTitle = title === site.name ? `${title}: Mechanics, Probability & Randomness` : `${title} | ${site.name}`;
+const pageTitle = title === site.homeTitle ? title : title === site.name ? `${title}: Mechanics, Probability & Randomness` : `${title} | ${site.name}`;
 const canonical = noindex ? undefined : canonicalUrl(path, siteConfig.origin);
 const image = `${siteConfig.origin}/images/learning-lab-social.png`;
 const imageAlt = 'WinGo Learning Lab: the ten digits, their size groups, and overlapping colors. An educational illustration.';

@@ -86,7 +86,7 @@ for (const [route, $] of pages) {
   console.log(`${route}: JS ${jsBytes} bytes gzip, CSS ${cssBytes} bytes gzip`);
 }
 const builtHtml = readdirSync(root, { recursive: true }).filter(file => String(file).endsWith('.html'));
-assert.equal(builtHtml.length, 15, 'Expected fourteen pages plus root 404');
+assert.equal(builtHtml.length, allRoutes.length, 'Expected every public route plus root 404');
 assert(pages.get('/wingo-rules/')('#color-classifications').length, 'Rules color anchor missing');
 checkSEO(pages, root, siteConfig);
 console.log(`PASS: ${routes.length} public routes + 404; ${linksChecked} internal links/anchors; unique metadata; local assets; environment indexing controls.`);

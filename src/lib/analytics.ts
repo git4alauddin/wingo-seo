@@ -15,8 +15,9 @@ export const pageNames: Record<string, string> = {
   '/patterns-and-randomness/': 'Patterns and randomness', '/historical-analysis/': 'Historical analysis',
   '/simulator/': 'Simulator', '/probability-calculator/': 'Probability calculator', '/guides/': 'Guides',
   '/about/': 'About', '/contact/': 'Contact', '/privacy-policy/': 'Privacy', '/terms/': 'Terms',
+  '/dmplay-wingo-guide/': 'DmPlay WinGo guide',
 };
-export const guidePaths = ['/what-is-wingo/', '/wingo-rules/', '/big-small-explained/', '/number-probability/', '/patterns-and-randomness/', '/historical-analysis/'];
+export const guidePaths = ['/what-is-wingo/', '/wingo-rules/', '/big-small-explained/', '/number-probability/', '/patterns-and-randomness/', '/historical-analysis/', '/dmplay-wingo-guide/'];
 export function sizeBucket(count: number): SizeBucket {
   if (!Number.isInteger(count) || count < 1 || count > 10_000) throw new RangeError('Invalid analytics sample-size bucket.');
   return count <= 20 ? '1-20' : count <= 200 ? '21-200' : count <= 2000 ? '201-2000' : '2001-10000';

@@ -9,6 +9,7 @@ takeaway: "A frequency describes the sample you counted. Always state the sample
 order: 6
 minutes: 6
 pubDate: 2026-11-03
+updatedDate: 2026-11-06
 publisher: project
 related: [patterns-and-randomness, number-probability]
 cta: simulator
@@ -21,6 +22,8 @@ sources:
 ## Start with provenance and a denominator
 
 Before reading a chart, ask where the numbers came from. Were they generated locally, constructed for teaching, or recorded elsewhere? How many results are included? Has anything been omitted?
+
+The [DmPlay WinGo history-chart walkthrough](/dmplay-wingo-guide/#reading-the-dmplay-number-chart) applies these questions to an owner-supplied interface reference and distinguishes displayed records from an audited dataset.
 
 This lab uses synthetic examples and, locally generated samples. It does not collect external game histories. The following 20 digits are a **constructed teaching dataset**, not live results or a claimed random sample:
 

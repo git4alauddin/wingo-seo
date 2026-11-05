@@ -4,7 +4,7 @@ An original educational website for learning number classifications, probability
 
 ## Current status
 
-**Phase 6: local QA and deployment preparation implemented; public deployment pending.** The Astro site includes 14 public pages, six guides, working educational tools, technical SEO, configurable analytics, production-candidate builds, Lighthouse diagnostics, and a read-only live release checker.
+**Phase 6: local QA and deployment preparation implemented; public deployment pending.** The Astro site includes 15 public pages, seven guides, working educational tools, technical SEO, configurable analytics, production-candidate builds, Lighthouse diagnostics, and a read-only live release checker.
 
 The first Workers deployment is live at `https://dmplay.kalam.trade/`, the hostname selected by the owner. Initial public route and tool checks passed. This revision aligns canonical URLs and configuration with that address. Production indexing and GA4 remain disabled. Cloudflare-injected Insights was observed in browser requests and needs owner review/disablement before the initial privacy checks can pass. See the [live review](docs/live-review.md).
 
@@ -76,6 +76,10 @@ npm run test:performance
 
 After authorized publication, `npm run check:release -- --production https://dmplay.kalam.trade --alias https://wingo-seo.ACCOUNT.workers.dev --preview https://qa-wingo-seo.ACCOUNT.workers.dev` checks actual public responses and saves a report under `artifacts/release-check/`. Replace the sample account and preview prefix with real matching hosts. Use an excluded branch Preview, not a Version URL sharing production HTML. This command is read-only. The [deployment runbook](docs/deployment.md) covers exact Workers build/deploy settings and host checks.
 
+## Search content update
+
+The independent `/dmplay-wingo-guide/` article explains the supplied DmPlay number/color, Big/Small and history-chart references. The homepage now uses the focused search title `WinGo Rules, Colors & Probability Guides | Kalam` and prominently links to the guide, alongside contextual links from three existing articles. See `docs/seo-content-release.md` for the query map, publication checks and owner Search Console submission/monitoring checklist. Search Console submission is not implied by a successful local build.
+
 ## Homepage external referral
 
 The shared design follows the supplied DmPlay logo: warm ivory surfaces, charcoal feature panels, and coral accents. Brand tokens in `src/styles/global.css` also style tool controls and consent UI. Semantic result colors (Green, Red, Violet) keep their existing meanings. Header, footer, CTA, favicon, and the regenerated social image use the supplied logo; the CTA animation retains its 1.92-second cycle and reduced-motion behavior.
@@ -101,7 +105,7 @@ config/seo.mjs              canonical, sitemap, robots, and host-rule helpers
 config/measurement.mjs      analytics gates and optional public destinations
 wrangler.jsonc             Workers static assets, routing, and preview URLs
 src/components/             navigation, metadata, cards, diagrams, tables
-src/content/guides/         six original Markdown articles
+src/content/guides/         seven original Markdown articles
 src/content.config.ts       schema-validated content collection
 src/data/site.ts            site identity and classification reference data
 src/layouts/                base, article, and information layouts
@@ -143,7 +147,7 @@ Use genuine publication/revision dates and original examples. A supplied revisio
 
 Unknown environments, invalid indexing flags, and unintended origins fail configuration validation. A production-labeled build without `SITE_INDEXABLE=true` stays excluded. Development/preview environments ignore an inherited true opt-in. Detected Cloudflare branches other than `main` stay excluded even if production settings were inherited; keep the branch guard consistent if the production branch changes.
 
-Indexable production builds emit fourteen canonical URLs in `/sitemap.xml`, advertise it from `/robots.txt`, and omit public-page `noindex`. Other profiles emit an empty, unadvertised sitemap and page-level `noindex`. The build also writes Cloudflare `_headers` and `_redirects`; Astro's local server does not apply those host-specific files. Known page aliases normalize without an SPA catch-all. See [technical SEO](docs/technical-seo.md) for exact behavior and release checks.
+Indexable production builds emit fifteen canonical URLs in `/sitemap.xml`, advertise it from `/robots.txt`, and omit public-page `noindex`. Other profiles emit an empty, unadvertised sitemap and page-level `noindex`. The build also writes Cloudflare `_headers` and `_redirects`; Astro's local server does not apply those host-specific files. Known page aliases normalize without an SPA catch-all. See [technical SEO](docs/technical-seo.md) for exact behavior and release checks.
 
 The original 1200×630 share image is committed as PNG, with its editable SVG source. Regenerate it after changing the SVG using `npm run assets:social`; normal builds use the committed image.
 

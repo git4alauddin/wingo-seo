@@ -50,7 +50,7 @@ function fixture(breakage = '') {
 }
 describe('live-response release checks with synthetic HTTP responses', () => {
   it('accepts the complete production and excluded-host contract', async () => {
-    const result = await checkRelease(targets, fixture()); expect(result.passed).toBe(true); expect(result.checks.length).toBe(33);
+    const result = await checkRelease(targets, fixture()); expect(result.passed).toBe(true); expect(result.checks.length).toBe(routes.length + 19);
   });
   it.each(['alias', 'redirect', '404', 'canonical', 'noindex', 'network'])('fails the release when %s is broken', async breakage => {
     const result = await checkRelease(targets, fixture(breakage)); expect(result.passed).toBe(false);

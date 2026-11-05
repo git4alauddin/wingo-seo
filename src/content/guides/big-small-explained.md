@@ -9,6 +9,7 @@ takeaway: "The 50/50 split comes from five equally likely digits in each group. 
 order: 3
 minutes: 4
 pubDate: 2026-11-03
+updatedDate: 2026-11-06
 publisher: project
 related: [wingo-rules, patterns-and-randomness]
 cta: calculator
@@ -21,6 +22,8 @@ sources:
 ## Which digits are Big and Small?
 
 In our selected example ruleset, **Small means 0 through 4**, while **Big means 5 through 9**. Both groups contain five digits.
+
+The independent [DmPlay WinGo screen guide](/dmplay-wingo-guide/#how-big-and-small-work) shows how to read these labels alongside the number and color in the supplied interface references.
 
 | Group | Digits | Number of possible outcomes |
 | --- | --- | --- |
