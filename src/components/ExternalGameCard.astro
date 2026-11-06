@@ -14,6 +14,7 @@ const coupons = [...new Set(couponCodes.map(code => code.trim()).filter(Boolean)
       {coupons.map(code => <li class="coupon-ticket"><code>{code}</code><button class="coupon-copy" type="button" data-copy-code={code} aria-label={`Copy code ${code}`} title="Copy code" hidden>
         <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
         <svg class="copied-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+        <span class="coupon-confetti" aria-hidden="true">{Array.from({ length: 12 }, (_, index) => <i style={{ backgroundColor: ['#ff9e7c', '#ffd77a', '#fff1d8', '#c3a1ff'][index % 4] }} />)}</span>
       </button></li>)}
     </ul>
     <p class="coupon-status" role="status" aria-live="polite" aria-atomic="true"></p>
@@ -21,6 +22,24 @@ const coupons = [...new Set(couponCodes.map(code => code.trim()).filter(Boolean)
 </section>
 
 <script>
+  function celebrateCopy(button: HTMLButtonElement) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    button.querySelectorAll<HTMLElement>('.coupon-confetti i').forEach((piece, index) => {
+      piece.getAnimations().forEach(animation => animation.cancel());
+      if (reducedMotion || typeof piece.animate !== 'function') return;
+      const angle = (-160 + index * (140 / 11)) * Math.PI / 180;
+      const distance = 26 + (index % 3) * 7;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+      piece.animate([
+        { transform: 'translate(-50%, -50%) scale(.3)', opacity: 0, offset: 0 },
+        { opacity: 1, offset: .12 },
+        { transform: `translate(${x}px, ${y}px) rotate(${index * 55 + 90}deg)`, opacity: .9, offset: .6 },
+        { transform: `translate(${x * 1.1}px, ${y + 30}px) rotate(${index * 55 + 270}deg) scale(.6)`, opacity: 0, offset: 1 },
+      ], { duration: 680 + (index % 3) * 40, easing: 'ease-out' });
+    });
+  }
+
   document.querySelectorAll<HTMLElement>('.coupon-panel').forEach(panel => {
     const status = panel.querySelector<HTMLElement>('.coupon-status');
     panel.querySelectorAll<HTMLButtonElement>('[data-copy-code]').forEach(button => {
@@ -37,6 +56,7 @@ const coupons = [...new Set(couponCodes.map(code => code.trim()).filter(Boolean)
           button.title = 'Copied';
           button.setAttribute('aria-label', `Copied code ${code}`);
           if (status) status.textContent = `Copied ${code}`;
+          celebrateCopy(button);
         } catch {
           button.title = 'Could not copy';
           button.setAttribute('aria-label', `Could not copy code ${code}. Select the code to copy manually.`);
@@ -100,7 +120,9 @@ const coupons = [...new Set(couponCodes.map(code => code.trim()).filter(Boolean)
   .coupon-ticket { display:flex; align-items:center; gap:9px; min-width:0; padding:11px 10px; border:1px dashed #b2866e; border-radius:7px; background:linear-gradient(110deg,#ffcfaa10,#ffcfaa04); }
   .coupon-ticket:last-child:nth-child(odd) { grid-column:1 / -1; }
   .coupon-ticket code { flex:1; min-width:0; color:#ffcfaa; font-family:var(--font-mono,monospace); font-size:.78rem; letter-spacing:.06em; overflow-wrap:anywhere; user-select:all; }
-  .coupon-copy { flex:none; display:grid; place-items:center; width:28px; height:28px; padding:0; border:1px solid #a17c6d; border-radius:5px; background:#ffcfaa0c; color:#ffcfaa; cursor:pointer; }
+  .coupon-copy { position:relative; flex:none; display:grid; place-items:center; width:28px; height:28px; padding:0; border:1px solid #a17c6d; border-radius:5px; background:#ffcfaa0c; color:#ffcfaa; cursor:pointer; }
+  .coupon-confetti { position:absolute; top:50%; left:50%; width:0; height:0; z-index:2; pointer-events:none; }
+  .coupon-confetti i { position:absolute; top:0; left:0; width:4px; height:7px; border-radius:1px; opacity:0; }
   .coupon-copy[hidden] { display:none; }
   .coupon-copy:hover,.coupon-copy[data-copied] { background:#ffcfaa; color:#3a201b; }
   .coupon-copy:focus-visible { outline:2px solid #fffdf8; outline-offset:3px; }
