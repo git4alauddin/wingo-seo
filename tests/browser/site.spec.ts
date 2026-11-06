@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { mkdir } from 'node:fs/promises';
 import { routes } from '../../tools/routes.mjs';
+import couponCodes from '../../src/data/coupons.json' with { type: 'json' };
 
 test('all pages load directly, refresh, and fit the viewport', async ({ page }) => {
   const errors: string[] = [];
@@ -66,6 +67,9 @@ test('core layouts have no detected WCAG A/AA violations and save review images'
 test('content and mobile navigation remain useful without JavaScript', async ({ browser, baseURL, isMobile }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: isMobile ? { width: 390, height: 844 } : { width: 1440, height: 1000 } });
   const page = await context.newPage();
+  await page.goto(`${baseURL}/`);
+  await expect(page.locator('.coupon-ticket code')).toHaveText(couponCodes);
+  await expect(page.locator('.coupon-copy:visible')).toHaveCount(0);
   await page.goto(`${baseURL}/wingo-rules/`);
   await expect(page.getByRole('heading', { name: 'Color classifications', exact: true })).toBeVisible();
   await expect(page.locator('tbody tr')).toHaveCount(10);
@@ -91,19 +95,51 @@ test('homepage referral is disclosed, user-initiated, and isolated from local to
   });
   await page.goto('/');
   const card = page.getByRole('region', { name: 'Observe the concepts in practice.' });
-  await expect(card).toContainText('Referral link');
-  await expect(card).toContainText('Demo-only access has not been verified.');
+  const disclosure = page.locator('#external-game-disclosure');
+  await expect(disclosure).toContainText('Referral link');
+  await expect(disclosure).toContainText('Demo-only access has not been verified.');
+  await expect(card.locator('.coupon-ticket')).toHaveCount(couponCodes.length);
+  await expect(card.locator('.coupon-badge')).toHaveCount(0);
   const link = card.getByRole('link', { name: 'Explore external game' });
   await expect(link).toHaveAttribute('href', 'https://www.dmplay20.com/#/register?invitationCode=96875106250');
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', 'sponsored nofollow noopener noreferrer');
   await expect(link).toHaveAttribute('referrerpolicy', 'no-referrer');
+  await expect(link).toHaveAttribute('aria-describedby', 'external-game-disclosure');
   await link.scrollIntoViewIfNeeded(); await link.focus();
   await expect(link).toBeFocused();
   expect(external).toEqual([]);
   await page.getByRole('link', { name: 'Explore the Simulator', exact: true }).first().click();
   await expect(page).toHaveURL(/\/simulator\/$/);
   await expect(page.getByRole('button', { name: 'Start experiment', exact: true })).toBeVisible();
+});
+
+test('coupon buttons copy the file value and confirm success only when copying succeeds', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
+      writeText: async (code: string) => { document.documentElement.dataset.copiedCode = code; },
+    } });
+  });
+  const first = page.locator('.coupon-copy').first();
+  await expect(first).toHaveAccessibleName(`Copy code ${couponCodes[0]}`);
+  await first.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('html')).toHaveAttribute('data-copied-code', couponCodes[0]);
+  await expect(first).toHaveAttribute('data-copied', 'true');
+  await expect(page.locator('.coupon-status')).toHaveText(`Copied ${couponCodes[0]}`);
+  await expect(first).not.toHaveAttribute('data-copied', 'true');
+  await expect(first).toHaveAccessibleName(`Copy code ${couponCodes[0]}`);
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', { value: {
+      writeText: async () => { throw new Error('Clipboard unavailable'); },
+    } });
+  });
+  const second = page.locator('.coupon-copy').nth(1);
+  await second.click();
+  await expect(page.locator('.coupon-status')).toHaveText('Could not copy. Select the code and copy it manually.');
+  await expect(second).not.toHaveAttribute('data-copied', 'true');
+  await expect(second).toBeEnabled();
 });
 
 test('the homepage referral hook is visible without scrolling on desktop and short phones', async ({ page }, testInfo) => {

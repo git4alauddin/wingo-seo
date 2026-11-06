@@ -1,5 +1,7 @@
 ---
+import couponCodes from '../data/coupons.json';
 const referralUrl = 'https://www.dmplay20.com/#/register?invitationCode=96875106250';
+const coupons = [...new Set(couponCodes.map(code => code.trim()).filter(Boolean))];
 ---
 <section class="external-game" aria-labelledby="external-game-title">
   <div class="experience-label"><span class="eyebrow">From learning to observation</span><span class="experience-badge">External platform</span></div>
@@ -11,9 +13,51 @@ const referralUrl = 'https://www.dmplay20.com/#/register?invitationCode=96875106
     <li><span aria-hidden="true">03</span><strong>Compare</strong></li>
   </ol>
   <a class="button experience-cta" href={referralUrl} target="_blank" rel="sponsored nofollow noopener noreferrer" referrerpolicy="no-referrer" aria-describedby="external-game-disclosure"><span class="cta-brand" aria-hidden="true"><img src="/images/dmplay-logo.png" width="260" height="113" alt="" /></span><span class="cta-label">Explore external game</span><span class="cta-arrow" aria-hidden="true">↗</span></a>
-  <p class="external-game-disclosure" id="external-game-disclosure">Referral link · Opens external registration in a new tab. Demo-only access has not been verified.</p>
-  <p class="experience-limit">A matching guess or a historical pattern does not establish an ability to predict future results.</p>
+  {coupons.length > 0 && <div class="coupon-panel" aria-labelledby="coupon-title">
+    <div class="coupon-heading"><span class="coupon-gift" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8H8.5A2.5 2.5 0 1 1 11 5.5L12 8Zm0 0h3.5A2.5 2.5 0 1 0 13 5.5L12 8Z"/></svg></span><div><h3 id="coupon-title">Coupon codes</h3></div></div>
+    <ul class="coupon-grid" aria-label="Coupon codes">
+      {coupons.map(code => <li class="coupon-ticket"><code>{code}</code><button class="coupon-copy" type="button" data-copy-code={code} aria-label={`Copy code ${code}`} title="Copy code" hidden>
+        <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
+        <svg class="copied-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+      </button></li>)}
+    </ul>
+    <p class="coupon-status" role="status" aria-live="polite" aria-atomic="true"></p>
+  </div>}
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.coupon-panel').forEach(panel => {
+    const status = panel.querySelector<HTMLElement>('.coupon-status');
+    panel.querySelectorAll<HTMLButtonElement>('[data-copy-code]').forEach(button => {
+      button.hidden = false;
+      let reset: ReturnType<typeof setTimeout> | undefined;
+      button.addEventListener('click', async () => {
+        const code = button.dataset.copyCode!;
+        button.disabled = true;
+        clearTimeout(reset);
+        button.removeAttribute('data-copied');
+        try {
+          await navigator.clipboard.writeText(code);
+          button.dataset.copied = 'true';
+          button.title = 'Copied';
+          button.setAttribute('aria-label', `Copied code ${code}`);
+          if (status) status.textContent = `Copied ${code}`;
+        } catch {
+          button.title = 'Could not copy';
+          button.setAttribute('aria-label', `Could not copy code ${code}. Select the code to copy manually.`);
+          if (status) status.textContent = 'Could not copy. Select the code and copy it manually.';
+        } finally {
+          button.disabled = false;
+          reset = setTimeout(() => {
+            button.removeAttribute('data-copied');
+            button.title = 'Copy code';
+            button.setAttribute('aria-label', `Copy code ${code}`);
+          }, 2000);
+        }
+      });
+    });
+  });
+</script>
 
 <style>
   .external-game { position:relative; min-width:0; padding:30px; border:1px solid #795042; border-radius:18px; background:radial-gradient(ellipse at 100% 0,#ff65491c,transparent 65%),linear-gradient(145deg,var(--dark-raised),var(--dark)); color:var(--on-dark); box-shadow:0 18px 45px #5c2d2026,inset 0 1px #ffcfaa14; }
@@ -53,8 +97,22 @@ const referralUrl = 'https://www.dmplay20.com/#/register?invitationCode=96875106
     .external-game .experience-cta,.experience-cta::before,.cta-arrow { animation:none; }
     .experience-cta::before { display:none; }
   }
-  .external-game-disclosure { margin-top:13px; font-size:.7rem; line-height:1.5; color:var(--on-dark-muted); }
-  .experience-limit { padding-top:12px; margin-top:13px; border-top:1px solid #ba8c7066; font-size:.7rem; line-height:1.5; color:#d8bfb3; }
+  .coupon-panel { margin-top:22px; padding:16px; border:1px solid #f5b38a99; border-radius:12px; background:radial-gradient(ellipse at 0 0,#ffad7630,transparent 75%),#ffcfaa05; box-shadow:0 0 22px #ff995b0d,inset 0 1px #ffe2c420; }
+  .coupon-heading { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .coupon-gift { flex:none; display:grid; place-items:center; width:36px; height:36px; color:#3a201b; background:linear-gradient(135deg,#ff9976,#ffcfaa); border:1px solid #ffe2c4; border-radius:9px; box-shadow:0 3px 12px #ff995b20; }
+  .coupon-heading h3 { margin:0; font-size:.85rem; font-weight:550; letter-spacing:.01em; }
+  .coupon-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; list-style:none; margin:0; padding:0; }
+  .coupon-ticket { display:flex; align-items:center; gap:9px; min-width:0; padding:11px 10px; border:1px dashed #b2866e; border-radius:7px; background:linear-gradient(110deg,#ffcfaa10,#ffcfaa04); }
+  .coupon-ticket:last-child:nth-child(odd) { grid-column:1 / -1; }
+  .coupon-ticket code { flex:1; min-width:0; color:#ffcfaa; font-family:var(--font-mono,monospace); font-size:.78rem; letter-spacing:.06em; overflow-wrap:anywhere; user-select:all; }
+  .coupon-copy { flex:none; display:grid; place-items:center; width:28px; height:28px; padding:0; border:1px solid #a17c6d; border-radius:5px; background:#ffcfaa0c; color:#ffcfaa; cursor:pointer; }
+  .coupon-copy[hidden] { display:none; }
+  .coupon-copy:hover,.coupon-copy[data-copied] { background:#ffcfaa; color:#3a201b; }
+  .coupon-copy:focus-visible { outline:2px solid #fffdf8; outline-offset:3px; }
+  .coupon-copy:disabled { cursor:wait; }
+  .copied-icon,.coupon-copy[data-copied] .copy-icon { display:none; }
+  .coupon-copy[data-copied] .copied-icon { display:block; }
+  .coupon-status { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
   @media(max-width:900px) { .external-game { order:-1; width:100%; max-width:560px; justify-self:center; } }
   @media(max-width:600px) {
     .external-game { padding:22px; border-radius:13px; }
@@ -64,6 +122,16 @@ const referralUrl = 'https://www.dmplay20.com/#/register?invitationCode=96875106
     .external-game .experience-cta { padding-inline:10px; gap:8px; font-size:.88rem; }
     .cta-brand { flex-basis:64px; padding:3px; }
     .cta-brand img { width:56px; }
+    .coupon-ticket { padding:10px 7px; gap:6px; }
+    .coupon-ticket code { font-size:.7rem; letter-spacing:.02em; }
   }
-  @media(max-width:360px) { .external-game { padding:18px; } .external-game h2 { font-size:1.7rem; } }
+  @media(max-width:360px) {
+    .external-game { padding:18px; }
+    .external-game h2 { font-size:1.7rem; }
+  }
+  @media(max-width:400px) {
+    .coupon-panel { padding:12px; }
+    .coupon-grid { grid-template-columns:minmax(0,1fr); }
+    .coupon-ticket code { font-size:.78rem; }
+  }
 </style>

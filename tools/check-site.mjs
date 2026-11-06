@@ -58,7 +58,9 @@ for (const [route, $] of pages) {
     assert($('script[src]').length, `${route}: missing tool bundle`);
   } else {
     assert.equal($('form').length, 0, `${route}: no unexpected non-tool form`);
-    if (!analyticsOn) assert.equal($('script[src]').length, 0, `${route}: disabled analytics must not add page scripts`);
+    if (route === '/' && $('.coupon-panel').length) {
+      assert($('script[src], script[type="module"]').length, 'Homepage coupon copy controls require their local script');
+    } else if (!analyticsOn) assert.equal($('script[src]').length, 0, `${route}: disabled analytics must not add page scripts`);
   }
   // Count the route's entry modules, their shared chunks, and its styles.
   const visited = new Set();
@@ -81,6 +83,7 @@ for (const [route, $] of pages) {
     if (asset?.startsWith('/')) measure(asset);
   });
   $('style').each((_, element) => { cssBytes += gzipSync($(element).html() ?? '').length; });
+  $('script[type="module"]:not([src])').each((_, element) => { jsBytes += gzipSync($(element).html() ?? '').length; });
   assert(jsBytes <= (toolRoutes.includes(route) ? 80 : 30) * 1024, `${route}: JavaScript budget exceeded`);
   assert(cssBytes <= 40 * 1024, `${route}: CSS budget exceeded`);
   console.log(`${route}: JS ${jsBytes} bytes gzip, CSS ${cssBytes} bytes gzip`);
