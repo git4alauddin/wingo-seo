@@ -94,13 +94,13 @@ test('homepage referral is disclosed, user-initiated, and isolated from local to
     return route.continue();
   });
   await page.goto('/');
-  const card = page.getByRole('region', { name: 'Observe the concepts in practice.' });
+  const card = page.getByRole('region', { name: 'Explore DmPlay at your own pace.' });
   const disclosure = page.locator('#external-game-disclosure');
   await expect(disclosure).toContainText('Referral link');
   await expect(disclosure).toContainText('Demo-only access has not been verified.');
   await expect(card.locator('.coupon-ticket')).toHaveCount(couponCodes.length);
   await expect(card.locator('.coupon-badge')).toHaveCount(0);
-  const link = card.getByRole('link', { name: 'Explore external game' });
+  const link = card.getByRole('link', { name: 'Visit DmPlay' });
   await expect(link).toHaveAttribute('href', 'https://www.dmplay20.com/#/register?invitationCode=96875106250');
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', 'sponsored nofollow noopener noreferrer');
@@ -146,7 +146,7 @@ test('the homepage referral hook is visible without scrolling on desktop and sho
   await mkdir('artifacts/screenshots/homepage-hook', { recursive: true });
   for (const [width,height] of [[1440,900],[393,852],[360,640],[320,568]]) {
     await page.setViewportSize({width,height}); await page.goto('/');
-    const link = page.getByRole('link', { name: 'Explore external game' });
+    const link = page.getByRole('link', { name: 'Visit DmPlay' });
     const visible = await link.evaluate(element => {
       const r=element.getBoundingClientRect();
       return r.top>=0 && r.bottom<=innerHeight && r.left>=0 && r.right<=innerWidth;
