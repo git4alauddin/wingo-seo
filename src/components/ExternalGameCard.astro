@@ -8,7 +8,7 @@ const refreshLabel = refreshAt ? new Intl.DateTimeFormat('en-IN', { dateStyle: '
 <section class="external-game" aria-labelledby="external-game-title">
   <div class="experience-label"><span class="eyebrow">{giftCard.eyebrow}</span><span class="experience-badge">{giftCard.badge}</span></div>
   <div class="gift-countdown" data-refresh-at={refreshAt} data-active-text={giftCard.timer.activeText} data-ended-text={giftCard.timer.endedText} data-state="pending">
-    <h2 id="external-game-title">{giftCard.heading}</h2>
+    <h2 id="external-game-title" class="claim-heading"><span class="claim-static">{giftCard.heading}</span><span class="claim-visual" aria-hidden="true" hidden><span class="claim-size">{giftCard.heading}</span><span class="claim-typed"></span></span></h2>
     <p class="drop-caption" data-drop-caption>{refreshAt ? giftCard.timer.activeText : giftCard.timer.pendingText}</p>
     <div class="drop-clock" role="timer" aria-label="Time until the next gift-code drop" aria-live="off" hidden>
       {['Hours', 'Minutes', 'Seconds'].map(unit => <div class="drop-unit"><span class="drop-face"><span class="drop-value" data-drop-unit={unit.toLowerCase()}>--</span></span><span class="drop-label">{unit}</span></div>)}
@@ -32,6 +32,43 @@ const refreshLabel = refreshAt ? new Intl.DateTimeFormat('en-IN', { dateStyle: '
 </section>
 
 <script>
+  document.querySelectorAll<HTMLElement>('.claim-heading').forEach(heading => {
+    const fullText = heading.querySelector<HTMLElement>('.claim-static')!;
+    const visual = heading.querySelector<HTMLElement>('.claim-visual')!;
+    const typed = heading.querySelector<HTMLElement>('.claim-typed')!;
+    const characters = Array.from(fullText.textContent ?? '');
+    if (!characters.length) return;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let count = 0;
+    let deleting = false;
+    const step = () => {
+      if (motion.matches || document.hidden) return;
+      count += deleting ? -1 : 1;
+      typed.textContent = characters.slice(0, count).join('');
+      let delay = deleting ? 30 : 65;
+      if (count === characters.length) { deleting = true; delay = 1800; }
+      if (count === 0) { deleting = false; delay = 450; }
+      timer = setTimeout(step, delay);
+    };
+    const sync = () => {
+      clearTimeout(timer);
+      fullText.classList.toggle('sr-only', !motion.matches);
+      visual.hidden = motion.matches;
+      if (motion.matches) return;
+      count = 0;
+      deleting = false;
+      typed.textContent = '';
+      step();
+    };
+    motion.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', () => {
+      clearTimeout(timer);
+      if (!document.hidden && !motion.matches) timer = setTimeout(step, 450);
+    });
+    sync();
+  });
+
   document.querySelectorAll<HTMLElement>('[data-refresh-at]').forEach(countdown => {
     const target = Date.parse(countdown.dataset.refreshAt ?? '');
     if (!Number.isFinite(target)) return;
@@ -125,6 +162,12 @@ const refreshLabel = refreshAt ? new Intl.DateTimeFormat('en-IN', { dateStyle: '
   .external-game .eyebrow { color:#ffcfaa; font-size:.61rem; }
   .experience-badge { padding:3px 7px; border:1px solid #a17c6d; border-radius:4px; font-size:.6rem; color:var(--on-dark-muted); }
   .external-game h2 { font-size:clamp(1.5rem,2.4vw,2rem); line-height:1.1; letter-spacing:-.04em; margin-bottom:10px; }
+  .claim-visual { position:relative; display:block; }
+  .claim-visual[hidden] { display:none; }
+  .claim-size { display:block; visibility:hidden; }
+  .claim-typed { position:absolute; inset:0; }
+  .claim-typed::after { content:''; display:inline-block; width:0; height:.85em; margin-left:2px; border-right:2px solid #ffcfaa; vertical-align:-.05em; animation:claim-cursor 1.1s step-end infinite; }
+  @keyframes claim-cursor { 0%,100% { opacity:1; } 50% { opacity:0; } }
   .drop-caption { color:#ffcfaa; font-size:.84rem; }
   .drop-clock { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-top:18px; }
   .drop-clock[hidden] { display:none; }
