@@ -1,0 +1,27 @@
+{
+  "eyebrow": "DmPlay WinGo",
+  "badge": "External platform",
+  "heading": "Claim your gift codes now.",
+  "timer": {
+    "nextRefreshAt": "2026-11-10T18:00:00+05:30",
+    "activeText": "New codes arrive in",
+    "pendingText": "Next drop to be announced",
+    "endedText": "Drop time reached. Check for new codes.",
+    "scheduledLabel": "Next drop:",
+    "unscheduledText": "Release time to be announced."
+  },
+  "link": {
+    "url": "https://www.dmplay20.com/#/register?invitationCode=96875106250",
+    "label": "Open DmPlay",
+    "logo": "/images/dmplay-logo.png"
+  },
+  "gifts": {
+    "title": "Gift codes",
+    "codes": [
+      "2X6P-7K2Q-9V4M",
+      "5N7K-4M8R-2X6P",
+      "9V4M-9P3V-5N7K"
+    ],
+    "infoText": "Redeem on DmPlay. Availability and terms may vary."
+  }
+}

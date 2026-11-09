@@ -2,7 +2,8 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { mkdir } from 'node:fs/promises';
 import { routes } from '../../tools/routes.mjs';
-import couponCodes from '../../src/data/coupons.json' with { type: 'json' };
+import giftCard from '../../src/data/gift-card.json' with { type: 'json' };
+const couponCodes = giftCard.gifts.codes;
 
 test('all pages load directly, refresh, and fit the viewport', async ({ page }) => {
   const errors: string[] = [];
@@ -94,14 +95,14 @@ test('homepage referral is disclosed, user-initiated, and isolated from local to
     return route.continue();
   });
   await page.goto('/');
-  const card = page.getByRole('region', { name: 'Explore DmPlay at your own pace.' });
+  const card = page.getByRole('region', { name: giftCard.heading });
   const disclosure = page.locator('#external-game-disclosure');
   await expect(disclosure).toContainText('Referral link');
   await expect(disclosure).toContainText('Demo-only access has not been verified.');
   await expect(card.locator('.coupon-ticket')).toHaveCount(couponCodes.length);
   await expect(card.locator('.coupon-badge')).toHaveCount(0);
-  const link = card.getByRole('link', { name: 'Visit DmPlay' });
-  await expect(link).toHaveAttribute('href', 'https://www.dmplay20.com/#/register?invitationCode=96875106250');
+  const link = card.getByRole('link', { name: giftCard.link.label });
+  await expect(link).toHaveAttribute('href', giftCard.link.url);
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', 'sponsored nofollow noopener noreferrer');
   await expect(link).toHaveAttribute('referrerpolicy', 'no-referrer');
@@ -142,11 +143,60 @@ test('coupon buttons copy the file value and confirm success only when copying s
   await expect(second).toBeEnabled();
 });
 
+test('gift countdown uses an absolute release time and never resets at zero', async ({ page }) => {
+  const now = new Date('2026-11-09T12:00:00Z');
+  await page.clock.install({ time: now });
+  await page.clock.pauseAt(now);
+  await page.route('http://127.0.0.1:4322/', async route => {
+    const response = await route.fetch();
+    const html = (await response.text()).replace(/data-refresh-at(?:="[^"]*")?(?=[\s>])/, 'data-refresh-at="2026-11-10T13:00:03Z"');
+    await route.fulfill({ response, body: html });
+  });
+  await page.goto('/');
+  await expect(page.locator('.drop-value')).toHaveText(['25', '00', '03']);
+  await expect(page.locator('[data-drop-unit="days"]')).toHaveCount(0);
+  await page.clock.fastForward(25 * 60 * 60 * 1000);
+  await expect(page.locator('[data-drop-unit="seconds"]')).toHaveText('03');
+  await expect(page.locator('[data-refresh-at]')).toHaveAttribute('data-state', 'active');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await page.locator('.drop-face').last().evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+  await page.clock.runFor(1000);
+  await expect(page.locator('[data-drop-unit="seconds"]')).toHaveText('02');
+  await page.reload();
+  await expect(page.locator('[data-drop-unit="seconds"]')).toHaveText('02');
+  await page.clock.runFor(3000);
+  await expect(page.locator('[data-refresh-at]')).toHaveAttribute('data-state', 'ended');
+  await expect(page.locator('[data-drop-caption]')).toHaveText(giftCard.timer.endedText);
+  await page.clock.runFor(60000);
+  await expect(page.locator('.drop-value')).toHaveText(['00', '00', '00']);
+});
+
+test('unscheduled gift drops show no deadline and the WinGo favicon loads', async ({ page, request }) => {
+  await page.route('http://127.0.0.1:4322/', async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace(/data-refresh-at(?:="[^"]*")?(?=[\s>])/, 'data-refresh-at=""') });
+  });
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: giftCard.gifts.title, exact: true })).toBeVisible();
+  await expect(page.locator('.gift-info-content')).toBeHidden();
+  await page.locator('.gift-info summary').click();
+  await expect(page.locator('.gift-info-content')).toBeVisible();
+  await expect(page.locator('.gift-info-content')).toContainText(giftCard.gifts.infoText);
+  await expect(page.locator('.drop-clock')).toBeHidden();
+  await expect(page.locator('[data-refresh-at]')).toHaveAttribute('data-state', 'pending');
+  await expect(page.locator('link[rel="icon"][type="image/png"]')).toHaveAttribute('href', '/favicon-48.png');
+  const image = await request.get('/favicon-48.png');
+  expect(image.status()).toBe(200);
+  const png = await image.body();
+  expect(png.readUInt32BE(16)).toBe(48);
+  expect(png.readUInt32BE(20)).toBe(48);
+});
+
 test('the homepage referral hook is visible without scrolling on desktop and short phones', async ({ page }, testInfo) => {
   await mkdir('artifacts/screenshots/homepage-hook', { recursive: true });
   for (const [width,height] of [[1440,900],[393,852],[360,640],[320,568]]) {
     await page.setViewportSize({width,height}); await page.goto('/');
-    const link = page.getByRole('link', { name: 'Visit DmPlay' });
+    const link = page.getByRole('link', { name: 'Open DmPlay' });
     const visible = await link.evaluate(element => {
       const r=element.getBoundingClientRect();
       return r.top>=0 && r.bottom<=innerHeight && r.left>=0 && r.right<=innerWidth;
